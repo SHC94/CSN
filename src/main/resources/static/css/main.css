@@ -31,7 +31,7 @@
 .menu_tab {
     width : 50%;
     margin-top: 20px;
-    margin-left: 6%;
+    margin-left: 10%;
     float: left;
 }
 
@@ -46,6 +46,8 @@
     border-radius: 5px;
     font-weight: bold;
     border-color: #00cc00;
+    margin-left : 5px;
+    margin-right : 5px;
 }
 
 /*로그인 영역*/
