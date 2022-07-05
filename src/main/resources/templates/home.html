@@ -18,15 +18,11 @@
 
     <!--메뉴 탭 영역-->
     <div class="menu_tab">
-        <table>
-            <thead>
-            <tr th:each="tab : ${tabList}">
-                <th>#</th>
-                <th th:text="${tab.tabNm}"></th>
-                <th></th>
-            </tr>
-            </thead>
-        </table>
+        <span>
+            <span th:each="tab : ${tabList}">
+                <a th:href="@{${tab.tabLink}}"><button th:text="${tab.tabNm}"></button></a>
+            </span>
+        </span>
     </div>
 
     <!--로그인 영역-->

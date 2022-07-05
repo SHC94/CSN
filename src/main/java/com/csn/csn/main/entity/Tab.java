@@ -18,5 +18,5 @@ public class Tab {
     private String tabNo;   /**탭 메뉴 번호*/
     private String tabCd;   /**탭 메뉴 코드*/
     private String tabNm;   /**탭 메뉴 명*/
-
+    private String tabLink; /**탭 링크*/
 }//end class()
