@@ -3,6 +3,7 @@
 <head th:replace="fragments/header :: header">
     <title>Hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
 </head>
 <body>
     <!--헤더 영역-->
@@ -11,25 +12,27 @@
     <div class="container">
 
         <!--메인 검색 영역-->
-        <span>
-            <input type="text" placeholder="검색어를 입력해주세요.">
-            <button>검색</button>
+        <span class="test">
+            <input type="text" class="mainSearch" placeholder="검색어를 입력해주세요.">
+            <button class="mainSearchBtn">검색</button>
         </span>
 
         <!--메뉴 탭 영역-->
         <div class="menu_tab">
             <span>
                 <span th:each="tab : ${tabList}">
-                    <a th:href="@{${tab.tabLink}}"><button th:text="${tab.tabNm}"></button></a>
+                    <a th:href="@{${tab.tabLink}}"><button class="tabBtn" th:text="${tab.tabNm}"></button></a>
                 </span>
             </span>
         </div>
 
         <!--로그인 영역-->
+        <div class="loginSector">
+            로그인 영역인데요?
+        </div>
 
 
         <!--메인 대시보드 영역-->
-
     </div>
 
     <!--푸터 영역-->
