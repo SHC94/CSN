@@ -1,4 +1,4 @@
-package com.csn.csn.entity;
+package com.csn.csn.test.entity;
 
 import lombok.Getter;
 import lombok.Setter;

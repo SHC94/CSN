@@ -1,23 +1,23 @@
-package com.csn.csn.service;
+package com.csn.csn.test.service;
 
-import com.csn.csn.entity.Members;
-import com.csn.csn.repository.TestRepository;
+import com.csn.csn.test.entity.Members;
+import com.csn.csn.test.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class TestServiceImpl implements TestService {
 
     private final TestRepository testRepository;
 
     @Override
-    public Members testSelect(Long memberId) {
+    public List<Members> testSelect() {
         log.info("testServiceImpl start");
-        return testRepository.testSelect(memberId);
+        return testRepository.testSelect();
     }
 }

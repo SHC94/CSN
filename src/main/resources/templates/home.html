@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <!--헤더 영역-->
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <!--메인 검색 영역-->
+    <span>
+        <a href="/"><img src="images/csn_logo2.png" alt="logo"></a>
+        <input type="text" placeholder="검색어를 입력해주세요.">
+        <button>검색</button>
+    </span>
+
+    <!--메뉴 탭 영역-->
+    <div class="menu_tab">
+        <table>
+            <thead>
+            <tr th:each="tab : ${tabList}">
+                <th>#</th>
+                <th th:text="${tab.tabNm}"></th>
+                <th></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!--로그인 영역-->
+
+
+    <!--메인 대시보드 영역-->
+
+
+    <!--푸터 영역-->
+    <div th:replace="fragments/footer :: footer" />
+</div>
+</body>
+</html>
