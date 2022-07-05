@@ -1,0 +1,59 @@
+/*body 내 상단 div*/
+.container {
+    text-align : center;
+}
+
+/*검색 영역*/
+.mainSearch {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 70%;
+    color: #999999;
+    border-radius: 5px;
+}
+
+.mainSearchBtn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: rgba(0, 53, 109, 0.95);
+    cursor: pointer;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/*탭 영역*/
+.menu_tab {
+    width : 50%;
+    margin-top: 20px;
+    margin-left: 6%;
+    float: left;
+}
+
+.tabBtn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #00cc00;
+    cursor: pointer;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    border-color: #00cc00;
+}
+
+/*로그인 영역*/
+.loginSector {
+    width: 20%;
+    margin-top: 20px;
+    margin-right: 12%;
+    float: right;
+    height: 200px;
+    border: 1px solid black;
+}
