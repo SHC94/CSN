@@ -1,0 +1,34 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.body-wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+.container {
+    margin-top: 20px;
+    padding-bottom: 30px; /* footer의 높이 */
+}
+
+/*헤더 영역 스타일*/
+.header {
+    text-align : center;
+    background-color: #FFD8D8;
+    border: 1px solid black;
+}
+
+/*푸터 영역 스타일*/
+.footer {
+    width: 100%;
+    height: 30px; /* footer의 높이 */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align : center;
+    background-color: #FFD8D8;
+    border: 1px solid black;
+}
