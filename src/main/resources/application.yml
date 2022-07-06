@@ -28,3 +28,8 @@ spring:
       charset: UTF-8
       enable: true
       force: true
+
+api:
+  naver:
+    client_id: K9TJfmrbHamf0arWWpQa
+    client_secret: Kkea5WMC2K

@@ -28,9 +28,16 @@
 
         <!--로그인 영역-->
         <div class="loginSector">
-            로그인 영역인데요?
+            <div id="loginInfo"></div>
+            <div id="button_area">
+                <div id="naverIdLogin"></div>
+            </div>
+            <div class="look_box">
+                <a href="https://nid.naver.com/user/help.nhn?todo=idinquiry" class="link_look" data-clk="log_off.searchid">아이디</a>
+                <a href="https://nid.naver.com/nidreminder.form" class="link_look" data-clk="log_off.searchpass">비밀번호찾기</a>
+            </div>
+            <a href="https://nid.naver.com/nidregister.form?url=https%3A%2F%2Fwww.naver.com" class="link_join" data-clk="log_off.registration">회원가입</a>
         </div>
-
 
         <!--메인 대시보드 영역-->
     </div>
@@ -38,4 +45,55 @@
     <!--푸터 영역-->
     <div th:replace="fragments/footer :: footer" />
 </body>
+<script type="text/javascript">
+    const naverLogin = new naver.LoginWithNaverId({
+        clientId    : "K9TJfmrbHamf0arWWpQa",                   //발급받은 Client ID
+        callbackUrl : "http://localhost:8080",                  //지정한 CallBack URL
+        loginButton : {color: "green", type: 3, height: 40}     //로그인 버튼 타입
+    });
+
+    naverLogin.init();
+
+    //로그인 상태 체크
+    naverLogin.getLoginStatus(function (status) {
+        if (status) {
+            const id        = naverLogin.user.getId();
+            const nickName  = naverLogin.user.getNickName();
+            const age       = naverLogin.user.getAge();
+            const birthday  = naverLogin.user.getBirthday();
+
+            if(id === null || id === undefined){
+                alert("정보제공에 동의해주세요.");
+                naverLogin.reprompt();
+                return ;
+            } else {
+                //로그인 정보 세팅
+                setLoginStatus();
+            }//end if()
+        }//end if()
+    });//end getLoginStatus()
+
+    //로그인 정보 세팅
+    function setLoginStatus(){
+
+        const loginInfo = document.getElementById('loginInfo');
+
+        loginInfo.innerHTML=`
+            <img class="loginImage" src=${naverLogin.user.profile_image} alt="My Image" style="width:100px; height:100px;">
+            <div class="loginName">${naverLogin.user.name} 님</div>
+            <div class="loginEmail">${naverLogin.user.email}</div>
+        `;
+
+        //로그인 버튼 >> 로그아웃 버튼
+        const button_area = document.getElementById('button_area');
+        button_area.innerHTML="<button id='btn_logout'>로그아웃</button>";
+
+        //로그아웃 기능
+        const logout = document.getElementById('btn_logout');
+        logout.addEventListener('click',(e)=>{
+            naverLogin.logout();
+            location.replace("http://localhost:8080");
+        })
+    }//end setLoginStatus()
+</script>
 </html>

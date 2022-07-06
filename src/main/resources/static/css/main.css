@@ -56,6 +56,35 @@
     margin-top: 20px;
     margin-right: 12%;
     float: right;
-    height: 200px;
-    border: 1px solid black;
+    height: 120px;
+    background-color: #E6F3F3;
+    border: 1px solid #EAEAEA;
+}
+
+/*프로필 이미지*/
+.loginImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+/*로그인 이름, 이메일*/
+.loginName, .loginEmail, #btn_logout {
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 13px;
+    float: left;
+}
+
+/*로그 아웃*/
+#btn_logout {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #D5D5D5;
+    border: 1px solid #D5D5D5;
+    color: white;
 }
