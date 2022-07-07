@@ -40,5 +40,4 @@ public class TransactionConfig {
         pointcut.setExpression(AOP_TRANSACTION_EXPRESSION);
         return new DefaultPointcutAdvisor(pointcut, transactionAdvice());
     }
-
 }

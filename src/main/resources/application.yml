@@ -1,19 +1,10 @@
 spring:
-  profiles:
-    group:
-      "local": "shc, lalalalz"
-
----
-
-spring:
   #MySQL 연동
-  profiles:
-    active: shc
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: root1234!
+    password: wlstn4050!
 
   #JPA 설정
   jpa:
@@ -23,28 +14,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-  http:
-    encoding:
-      charset: UTF-8
-      enable: true
-      force: true
-
-  api:
-    naver:
-      client_id: K9TJfmrbHamf0arWWpQa
-      client_secret: Kkea5WMC2K
-
----
-
-spring:
-  profiles:
-    active: lalalalz
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: root
-    password: wlstn4050!
 
   #ddl-auto 옵션
   #jpa의 database 초기화 전략
@@ -54,14 +23,6 @@ spring:
   #create : SessionFactory 시작 시점에 drop을 실행하고 create를 실행
   #validate : 변경된 스키마가 존재하면 변경사항을 출력하고 app을 종료
 
-  #JPA 설정
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
   http:
     encoding:
       charset: UTF-8
@@ -72,7 +33,3 @@ api:
   naver:
     client_id: K9TJfmrbHamf0arWWpQa
     client_secret: Kkea5WMC2K
-
-
-
-
