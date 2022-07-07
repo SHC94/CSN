@@ -1,6 +1,7 @@
 package com.csn.csn.member.entity;
 
 import com.csn.csn.member.dto.MemberSaveDto;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Column;
