@@ -1,5 +1,14 @@
 spring:
+  profiles:
+    group:
+      "local": "shc, lalalalz"
+
+---
+
+spring:
   #MySQL 연동
+  profiles:
+    active: shc
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -29,7 +38,8 @@ spring:
 ---
 
 spring:
-  profiles: lalalalz
+  profiles:
+    active: lalalalz
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
