@@ -1,4 +1,4 @@
-package com.csn.csn.aop;
+package com.csn.csn.config;
 
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
@@ -32,13 +32,13 @@ public class TransactionConfig {
         source.setTransactionAttribute(transactionAttribute);
 
         return new TransactionInterceptor(transactionManager, source);
-    }
+    }//end transactionAdvice()
 
     @Bean
     public Advisor transactionAdviceAdvisor(){
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(AOP_TRANSACTION_EXPRESSION);
         return new DefaultPointcutAdvisor(pointcut, transactionAdvice());
-    }
+    }//end transactionAdviceAdvisor()
 
-}
+}//end class()
