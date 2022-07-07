@@ -1,4 +1,4 @@
-package com.csn.csn.Search;
+package com.csn.csn.search;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

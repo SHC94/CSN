@@ -45,7 +45,7 @@
 <script type="text/javascript">
     const naverLogin = new naver.LoginWithNaverId({
         clientId    : "K9TJfmrbHamf0arWWpQa",                   //발급받은 Client ID
-        callbackUrl : "http://localhost:8080",                  //지정한 CallBack URL
+        callbackUrl : "http://localhost:8081",                  //지정한 CallBack URL
         loginButton : {color: "green", type: 3, height: 40}     //로그인 버튼 타입
     });
 
@@ -94,7 +94,7 @@
         const logout = document.getElementById('btn_logout');
         logout.addEventListener('click',(e)=>{
             naverLogin.logout();
-            location.replace("http://localhost:8080");
+            location.replace("http://localhost:8081");
         })
     }//end setLoginStatus()
 

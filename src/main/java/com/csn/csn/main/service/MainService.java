@@ -8,4 +8,6 @@ public interface MainService {
 
     public List<Tab> selectTab();
 
+    public void batchTest();
+
 }//end interface()

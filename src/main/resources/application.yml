@@ -4,7 +4,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: root1234!
+    password: wlstn4050!
 
   #JPA 설정
   jpa:
@@ -15,13 +15,13 @@ spring:
         show_sql: true
         format_sql: true
 
-#ddl-auto 옵션
-#jpa의 database 초기화 전략
-#none : 아무것도 실행하지 않음
-#create-drop : SessionFactroy 시작 시점에 drop 후 create를 실행하며, SessionFactory 종료시 drop을 실행함
-#update : 변경된 스키마를 적용
-#create : SessionFactory 시작 시점에 drop을 실행하고 create를 실행
-#validate : 변경된 스키마가 존재하면 변경사항을 출력하고 app을 종료
+  #ddl-auto 옵션
+  #jpa의 database 초기화 전략
+  #none : 아무것도 실행하지 않음
+  #create-drop : SessionFactroy 시작 시점에 drop 후 create를 실행하며, SessionFactory 종료시 drop을 실행함
+  #update : 변경된 스키마를 적용
+  #create : SessionFactory 시작 시점에 drop을 실행하고 create를 실행
+  #validate : 변경된 스키마가 존재하면 변경사항을 출력하고 app을 종료
 
   http:
     encoding:
