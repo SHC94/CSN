@@ -61,6 +61,10 @@
     border: 1px solid #EAEAEA;
 }
 
+#naverIdLogin {
+    margin-top: 30px;
+}
+
 /*프로필 이미지*/
 .loginImage {
     width: 100px;

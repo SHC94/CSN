@@ -4,7 +4,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sys?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: wlstn4050!
+    password: root1234!
 
   #JPA 설정
   jpa:
