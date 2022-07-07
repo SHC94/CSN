@@ -31,14 +31,11 @@
             <div id="loginInfo"></div>
             <div id="button_area">
                 <div id="naverIdLogin"></div>
-            </div>
-            <div class="look_box">
                 <a href="https://nid.naver.com/user/help.nhn?todo=idinquiry" class="link_look" data-clk="log_off.searchid">아이디</a>
                 <a href="https://nid.naver.com/nidreminder.form" class="link_look" data-clk="log_off.searchpass">비밀번호찾기</a>
+                <a href="https://nid.naver.com/nidregister.form?url=https%3A%2F%2Fwww.naver.com" class="link_join" data-clk="log_off.registration">회원가입</a>
             </div>
-            <a href="https://nid.naver.com/nidregister.form?url=https%3A%2F%2Fwww.naver.com" class="link_join" data-clk="log_off.registration">회원가입</a>
         </div>
-
         <!--메인 대시보드 영역-->
     </div>
 
@@ -56,6 +53,8 @@
 
     //로그인 상태 체크
     naverLogin.getLoginStatus(function (status) {
+
+        console.log(JSON.stringify(naverLogin.user));
         if (status) {
             const id        = naverLogin.user.getId();
             const nickName  = naverLogin.user.getNickName();
@@ -76,6 +75,9 @@
     //로그인 정보 세팅
     function setLoginStatus(){
 
+        //세션 정보 생성
+        createSession();
+
         const loginInfo = document.getElementById('loginInfo');
 
         loginInfo.innerHTML=`
@@ -95,5 +97,44 @@
             location.replace("http://localhost:8080");
         })
     }//end setLoginStatus()
+
+    //세션 정보 생성
+    function createSession() {
+        console.log('ㅎㅇ session');
+
+        var data = {
+            "age"               : naverLogin.user.age                 //나이
+            , "birthday"        : naverLogin.user.birthday          //생일 일월
+            , "email"           : naverLogin.user.email             //이메일
+            , "gender"          : naverLogin.user.gender            //성별
+            , "id"              : naverLogin.user.id                //아이디
+            , "name"            : naverLogin.user.name              //이름
+            , "nickname"        : naverLogin.user.nickname          //별명
+            , "profile_image"   : naverLogin.user.profile_image     //프로필 사진
+        }
+
+        console.log("jsonData = " + JSON.stringify(data));
+
+        var request = $.ajax({
+          url       : "/session/saveSession", 	// 통신할url
+          method    : "POST",			        // 통신할 메서드 타입
+          data      : data,		                // 전송할 데이터
+          dataType  : "html"			        // 전송받은 데이터를 변환시킬 컨텐츠 타입
+        });
+
+        //정상적으로 통신이 완료되었을 때 실행되는 메소드. 인수값인 함수를 실행시킴(콜백함수)
+        request.done(function( data ) {
+            console.log('session 저장 성공');
+            console.log(data);
+        });
+
+        //에러가 발생했을 때 실행되는 메서드
+        request.fail(function( jqXHR, textStatus ) {
+            console.log('session 저장 실패');
+            alert( "Request failed: " + textStatus );
+        });
+
+    }//end createSession()
+
 </script>
 </html>
