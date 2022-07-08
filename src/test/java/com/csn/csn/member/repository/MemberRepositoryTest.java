@@ -20,14 +20,14 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 //@Rollback
 class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private EntityManager entityManager;
+//    @Autowired
+//    private EntityManager entityManager;
 
     @BeforeEach
     void beforeEach() {
@@ -48,6 +48,21 @@ class MemberRepositoryTest {
     void save() {
         Member member = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
         Long savedMemberId = memberRepository.save(member);
+    }
+
+    @Test
+    @DisplayName("중복아이디 회원을 저장한다.")
+    void save_중복아이디() {
+        Member member1 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+        Long savedMemberId1 = memberRepository.save(member1);
+
+        Member member2 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+        Long savedMemberId2 = memberRepository.save(member2);
+
+        List<Member> all = memberRepository.findAll();
+        for (Member member : all) {
+            System.out.println(member.getId() + " " + member.getLoginId());
+        }
     }
 
     @Test
