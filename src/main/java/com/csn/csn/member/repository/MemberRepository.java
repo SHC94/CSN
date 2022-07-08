@@ -3,10 +3,13 @@ package com.csn.csn.member.repository;
 import com.csn.csn.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -17,29 +20,29 @@ public class MemberRepository {
 
     public Long save(Member member) {
         em.persist(member);
-        log.info("MemberRepository::save::{} 회원 저장완료", member.getId());
         return member.getId();
     }
 
-    public Member findOne(Long memberId) {
-        return em.find(Member.class, memberId);
+    public void delete(Member member) {
+        em.remove(member);
     }
 
-    public Member findOneByLoginId(String loginId) {
-        List<Member> memberList = em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
-                .setParameter("loginId", loginId)
-                .getResultList();
+    public Optional<Member> find(Long memberId) {
+        Member findMember = em.find(Member.class, memberId);
+        return Optional.ofNullable(findMember);
+    }
 
-        return memberList.isEmpty() ? null : memberList.get(0);
+    public Optional<Member> findByLoginId(String loginId) {
+         List<Member> memberList = em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                 .setParameter("loginId", loginId)
+                 .getResultList();
+
+         return Optional.ofNullable(
+                 memberList.size() > 0 ? memberList.get(0) : null
+         );
     }
 
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class).getResultList();
-    }
-
-    public void deleteOne(Long memberId) {
-        em.createQuery("delete from Member m where m.id = :memberId")
-                .setParameter("memberId", memberId);
-        log.info("MemberRepository::deleteOne::{}회원이 삭제되었습니다.", memberId);
     }
 }

@@ -1,6 +1,6 @@
 package com.csn.csn.member.entity;
 
-import com.csn.csn.member.dto.MemberSaveDto;
+import com.csn.csn.member.dto.MemberJoinDto;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -37,7 +37,7 @@ public class Member {
         this.phone = phone;
     }
 
-    public Member(MemberSaveDto memberSaveDto) {
+    public Member(MemberJoinDto memberSaveDto) {
         loginId = memberSaveDto.getLoginId();
         password = memberSaveDto.getPassword();
         name = memberSaveDto.getName();

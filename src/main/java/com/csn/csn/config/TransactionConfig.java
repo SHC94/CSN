@@ -14,7 +14,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import java.util.Collections;
 
-@Configuration
+//@Configuration
 public class TransactionConfig {
 
     private static final String AOP_TRANSACTION_METHOD_NAME="*";
