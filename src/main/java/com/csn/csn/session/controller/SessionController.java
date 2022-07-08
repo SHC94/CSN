@@ -21,6 +21,14 @@ public class SessionController {
 
     private final SessionService sessionService;
 
+    /**
+     * 세션 연결
+     * @param model
+     * @param session
+     * @param request
+     * @param response
+     * @param loginRequestVo
+     */
     @RequestMapping(value = "/connectionSession", method = RequestMethod.POST)
     public void connectionSession(Model model, HttpSession session,
                                HttpServletRequest request, HttpServletResponse response,
@@ -30,6 +38,13 @@ public class SessionController {
 
     }//end sessionRequest()
 
+    /**
+     * 세션 종료
+     * @param model
+     * @param session
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/disConnectionSession", method = RequestMethod.POST)
     public void disConnectionSession(Model model, HttpSession session,
                                      HttpServletRequest request, HttpServletResponse response) {
