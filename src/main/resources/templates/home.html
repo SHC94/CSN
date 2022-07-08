@@ -9,6 +9,7 @@
     <!--헤더 영역-->
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
+    <!--바디 영역-->
     <div class="container">
 
         <!--메인 검색 영역-->
@@ -28,14 +29,49 @@
 
         <!--로그인 영역-->
         <div class="loginSector">
-            <div id="loginInfo"></div>
-            <div id="button_area">
-                <div id="naverIdLogin"></div>
-                <a href="https://nid.naver.com/user/help.nhn?todo=idinquiry" class="link_look" data-clk="log_off.searchid">아이디</a>
-                <a href="https://nid.naver.com/nidreminder.form" class="link_look" data-clk="log_off.searchpass">비밀번호찾기</a>
-                <a href="https://nid.naver.com/nidregister.form?url=https%3A%2F%2Fwww.naver.com" class="link_join" data-clk="log_off.registration">회원가입</a>
+
+            <!--로그인 정보 입력 영역-->
+            <div th:if="${session.user==null}">
+                <form role="form" action="/loginMember" th:object="${loginForm}"  method="post">
+
+
+                        <label th:for="loginId">아이디</label>
+                        <br>
+                        <!--*** VALID 처리하려했지만 잘안됨.-->
+                        <input type="text" th:field="*{loginId}" class="form-control"
+                               th:class="${#fields.hasErrors('loginId')}? 'form-control fieldError' : 'form-control'">
+                        <br>
+                        <label th:for="loginPw">비밀번호</label>
+                        <br>
+                        <input type="password" th:field="*{loginPw}" class="form-control"
+                               th:class="${#fields.hasErrors('loginPw')}? 'form-control fieldError' : 'form-control'">
+                        <br>
+                        <button type="submit" style="width:90%" id="login">Login</button>
+
+                        <div align="left">
+                            <a href="*">아이디 찾기</a><br>
+                            <a href="*">비밀번호 찾기</a><br>
+                            <a href="*">회원 가입</a>
+                        </div>
+
+                        <div id="naverIdLogin"></div>
+
+                </form>
+            </div>
+
+            <!--로그인 정보 출력 영역-->
+            <div th:if="${session.user!=null}">
+                로그인 정보 출력이다
+                <div id="loginInfo" align="left">
+                    <p>이름 : <span th:text="${session.name}"></span></p>
+                    <p>ID : <span th:text="${session.id}"></span></p>
+                    <p>email : <span th:text="${session.email}"></span></p>
+                    <button id='btn_logout'>로그아웃</button>
+                </div>
+                </div>
             </div>
         </div>
+
         <!--메인 대시보드 영역-->
     </div>
 
@@ -43,98 +79,118 @@
     <div th:replace="fragments/footer :: footer" />
 </body>
 <script type="text/javascript">
-    const naverLogin = new naver.LoginWithNaverId({
-        clientId    : "K9TJfmrbHamf0arWWpQa",                   //발급받은 Client ID
-        callbackUrl : "http://localhost:8081",                  //지정한 CallBack URL
-        loginButton : {color: "green", type: 3, height: 40}     //로그인 버튼 타입
+/*HTML 로딩 후 실행 함수=================================================================================================*/
+$(document).ready(function(){
+    console.log('ready function');
+});
+
+
+/*이벤트 함수 =================================================================================================*/
+//로그아웃 버튼 클릭
+$('#btn_logout').on('click', function () {
+
+    var request = $.ajax({
+      url       : "/session/disConnectionSession", 	// 통신할url
+      method    : "POST",			                // 통신할 메서드 타입
+      dataType  : "html"			                // 전송받은 데이터를 변환시킬 컨텐츠 타입
     });
 
-    naverLogin.init();
+    request.done(function( data ) {
+        naverLogin.logout();
+        location.replace("http://localhost:8081");
+    });
 
-    //로그인 상태 체크
-    naverLogin.getLoginStatus(function (status) {
+});
 
-        console.log(JSON.stringify(naverLogin.user));
-        if (status) {
-            const id        = naverLogin.user.getId();
-            const nickName  = naverLogin.user.getNickName();
-            const age       = naverLogin.user.getAge();
-            const birthday  = naverLogin.user.getBirthday();
 
-            if(id === null || id === undefined){
-                alert("정보제공에 동의해주세요.");
-                naverLogin.reprompt();
-                return ;
-            } else {
-                //로그인 정보 세팅
-                setLoginStatus();
-            }//end if()
+/*사용자 정의 함수 =================================================================================================*/
+//네이버 로그인
+const naverLogin = new naver.LoginWithNaverId({
+    clientId    : "K9TJfmrbHamf0arWWpQa",                   //발급받은 Client ID
+    callbackUrl : "http://localhost:8081",                  //지정한 CallBack URL
+    loginButton : {color: "green", type: 3, height: 40}     //로그인 버튼 타입
+});
+
+naverLogin.init();
+
+//로그인 상태 체크
+naverLogin.getLoginStatus(function (status) {
+
+    if (status) {
+        const id        = naverLogin.user.getId();
+        const nickName  = naverLogin.user.getNickName();
+        const age       = naverLogin.user.getAge();
+        const birthday  = naverLogin.user.getBirthday();
+
+        if(id === null || id === undefined){
+            alert("정보제공에 동의해주세요.");
+            naverLogin.reprompt();
+            return ;
+        } else {
+            //세션 정보 생성
+            createSession();
         }//end if()
-    });//end getLoginStatus()
+    }//end if()
+});//end getLoginStatus()
 
-    //로그인 정보 세팅
-    function setLoginStatus(){
+//세션 정보 생성
+function createSession() {
 
-        //세션 정보 생성
-        createSession();
+    var data = {
+        "age"               : naverLogin.user.age               //나이
+        , "birthday"        : naverLogin.user.birthday          //생일 일월
+        , "email"           : naverLogin.user.email             //이메일
+        , "gender"          : naverLogin.user.gender            //성별
+        , "id"              : naverLogin.user.id                //아이디
+        , "name"            : naverLogin.user.name              //이름
+        , "nickname"        : naverLogin.user.nickname          //별명
+        , "profile_image"   : naverLogin.user.profile_image     //프로필 사진
+        , "loginWay"        : "Naver"                           //로그인 수단 (네이버)
+    }
 
-        const loginInfo = document.getElementById('loginInfo');
+    var request = $.ajax({
+      url       : "/session/connectionSession", 	// 통신할url
+      method    : "POST",			                // 통신할 메서드 타입
+      data      : data,		                        // 전송할 데이터
+      dataType  : "html"			                // 전송받은 데이터를 변환시킬 컨텐츠 타입
+    });
 
-        loginInfo.innerHTML=`
-            <img class="loginImage" src=${naverLogin.user.profile_image} alt="My Image" style="width:100px; height:100px;">
-            <div class="loginName">${naverLogin.user.name} 님</div>
-            <div class="loginEmail">${naverLogin.user.email}</div>
-        `;
+    //정상적으로 통신이 완료되었을 때 실행되는 메소드. 인수값인 함수를 실행시킴(콜백함수)
+    request.done(function( data ) {
+        location.reload();
+    });
 
-        //로그인 버튼 >> 로그아웃 버튼
-        const button_area = document.getElementById('button_area');
-        button_area.innerHTML="<button id='btn_logout'>로그아웃</button>";
+    //에러가 발생했을 때 실행되는 메서드
+    request.fail(function( jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus );
+    });
 
-        //로그아웃 기능
-        const logout = document.getElementById('btn_logout');
-        logout.addEventListener('click',(e)=>{
-            naverLogin.logout();
-            location.replace("http://localhost:8081");
-        })
-    }//end setLoginStatus()
+    //네이버 회원 정보 저장
+    createNaverMember();
 
-    //세션 정보 생성
-    function createSession() {
-        console.log('ㅎㅇ session');
+}//end createSession()
 
-        var data = {
-            "age"               : naverLogin.user.age                 //나이
-            , "birthday"        : naverLogin.user.birthday          //생일 일월
-            , "email"           : naverLogin.user.email             //이메일
-            , "gender"          : naverLogin.user.gender            //성별
-            , "id"              : naverLogin.user.id                //아이디
-            , "name"            : naverLogin.user.name              //이름
-            , "nickname"        : naverLogin.user.nickname          //별명
-            , "profile_image"   : naverLogin.user.profile_image     //프로필 사진
-        }
+//네이버 회원 정보 저장
+function createNaverMember() {
+    console.log('createNaverMember start ====');
 
-        console.log("jsonData = " + JSON.stringify(data));
+    var data = {
+        "email"     : naverLogin.user.email //이메일
+        , "loginId" : naverLogin.user.id    //아이디
+        , "name"    : naverLogin.user.name  //이름
+    }
 
-        var request = $.ajax({
-          url       : "/session/saveSession", 	// 통신할url
-          method    : "POST",			        // 통신할 메서드 타입
-          data      : data,		                // 전송할 데이터
-          dataType  : "html"			        // 전송받은 데이터를 변환시킬 컨텐츠 타입
-        });
+    var request = $.ajax({
+      url       : "/join", 	            // 통신할url
+      method    : "POST",			    // 통신할 메서드 타입
+      data      : data,		            // 전송할 데이터
+      dataType  : "html"			    // 전송받은 데이터를 변환시킬 컨텐츠 타입
+    });
 
-        //정상적으로 통신이 완료되었을 때 실행되는 메소드. 인수값인 함수를 실행시킴(콜백함수)
-        request.done(function( data ) {
-            console.log('session 저장 성공');
-            console.log(data);
-        });
-
-        //에러가 발생했을 때 실행되는 메서드
-        request.fail(function( jqXHR, textStatus ) {
-            console.log('session 저장 실패');
-            alert( "Request failed: " + textStatus );
-        });
-
-    }//end createSession()
-
+    //정상적으로 통신이 완료되었을 때 실행되는 메소드. 인수값인 함수를 실행시킴(콜백함수)
+    request.done(function( data ) {
+        location.reload();
+    });
+}//end createNaverMember()
 </script>
 </html>
