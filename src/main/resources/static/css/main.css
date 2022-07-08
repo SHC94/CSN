@@ -52,11 +52,10 @@
 
 /*로그인 영역*/
 .loginSector {
-    width: 20%;
     margin-top: 20px;
     margin-right: 12%;
+    padding : 20px;
     float: right;
-    height: 120px;
     background-color: #E6F3F3;
     border: 1px solid #EAEAEA;
 }
