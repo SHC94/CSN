@@ -14,5 +14,4 @@ public class MemberDto {
     private String email;
     private String phone;
 
-//    public
 }

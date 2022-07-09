@@ -21,11 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-//@Rollback
+@Transactional
+@Rollback
 class MemberRepositoryTest {
 
-    @Autowired
-    private TestRepo testRepository;
     @Autowired
     private MemberRepository memberRepository;
     @PersistenceContext
@@ -46,38 +45,29 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @Transactional
-    @Rollback(value = false)
-    @DisplayName("회원을 저장한다.")
-    void persist() {
-        Member member = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        entityManager.persist(member);
-    }
-
-    @Test
-    @Transactional
-    @Rollback(value = false)
     @DisplayName("회원을 저장한다.")
     void save() {
-        Member member = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+        Member member = new Member("lalalalz2", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
         Long savedMemberId = memberRepository.save(member);
     }
 
     @Test
-    @DisplayName("중복아이디 회원을 저장한다.")
-    @Transactional
     @Rollback(value = false)
+    @DisplayName("중복아이디 회원을 저장한다.")
     void save_중복아이디() {
-        Member member1 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId1 = memberRepository.save(member1);
+        try {
+            Member member1 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+            Long savedMemberId1 = memberRepository.save(member1);
 
-        Member member2 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId2 = memberRepository.save(member2);
+            Member member2 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+            Long save = memberRepository.save(member2);
 
-        List<Member> members = memberRepository.findByLoginId2("lalalalz");
-        for (Member member : members) {
-            System.out.println("member.getId() = " + member.getId());
+        } catch (Exception e) {
+            System.out.println("e = " + e);
         }
+
+//        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(member2));
+
     }
 
     @Test
@@ -117,32 +107,33 @@ class MemberRepositoryTest {
     }
 
 
-//    @Test
-//    @DisplayName("로그인 아이디로 회원을 검색한다. -> 있을 때")
-//    void findOneByLoginId_있을때() {
-//        //given
-//        String loginId = "lalalalz";
-//
-//        //when
-//        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
-//
-//        //then
-//        assertThat(1L).isEqualTo(findMember.get().getId());
-//    }
-//
-//    @Test
-//    @DisplayName("로그인 아이디로 회원을 검색한다. -> 없을 때")
-//    void findOneByLoginId_없을때() {
-//        //given
-//        String loginId = "없는 아이디입니다.";
-//
-//        //when
-//        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
-//
-//        //then
-//        assertThatThrownBy(() ->findMember.get())
-//                .isInstanceOf(NoSuchElementException.class);
-//    }
+    @Test
+    @DisplayName("로그인 아이디로 회원을 검색한다. -> 있을 때")
+    void findOneByLoginId_있을때() {
+        //given
+        Member member = new Member("lalalalz2", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
+        Long savedMemberId = memberRepository.save(member);
+
+        //when
+        Optional<Member> findMember = memberRepository.findByLoginId("lalalalz2");
+
+        //then
+        assertThat(member.getId()).isEqualTo(findMember.get().getId());
+    }
+
+    @Test
+    @DisplayName("로그인 아이디로 회원을 검색한다. -> 없을 때")
+    void findOneByLoginId_없을때() {
+        //given
+        String loginId = "없는 아이디입니다.";
+
+        //when
+        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+
+        //then
+        assertThatThrownBy(() ->findMember.get())
+                .isInstanceOf(NoSuchElementException.class);
+    }
 
     @Test
     @DisplayName("모든 회원을 조회한다.")
