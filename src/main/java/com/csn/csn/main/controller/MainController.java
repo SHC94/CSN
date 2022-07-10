@@ -49,7 +49,7 @@ public class MainController {
      * @param result
      * @return
      */
-    @RequestMapping(value="/login", method= RequestMethod.POST)
+    @RequestMapping(value="/loginMember", method= RequestMethod.POST)
     @ResponseBody
     public String login(@Valid LoginForm loginForm, BindingResult result, HttpSession session) {
         log.info("MainController login start ======================");

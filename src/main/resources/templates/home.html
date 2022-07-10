@@ -32,7 +32,7 @@
 
             <!--로그인 정보 입력 영역-->
             <div th:if="${session.user==null}">
-                <form role="form" action="/login" th:object="${loginForm}"  method="post">
+                <form role="form" action="/loginMember" th:object="${loginForm}"  method="post">
 
 
                         <label th:for="loginId">아이디</label>
@@ -165,6 +165,32 @@ function createSession() {
         alert( "Request failed: " + textStatus );
     });
 
+    //네이버 회원 정보 저장
+    createNaverMember();
+
 }//end createSession()
+
+//네이버 회원 정보 저장
+function createNaverMember() {
+    console.log('createNaverMember start ====');
+
+    var data = {
+        "email"     : naverLogin.user.email //이메일
+        , "loginId" : naverLogin.user.id    //아이디
+        , "name"    : naverLogin.user.name  //이름
+    }
+
+    var request = $.ajax({
+      url       : "/join", 	            // 통신할url
+      method    : "POST",			    // 통신할 메서드 타입
+      data      : data,		            // 전송할 데이터
+      dataType  : "html"			    // 전송받은 데이터를 변환시킬 컨텐츠 타입
+    });
+
+    //정상적으로 통신이 완료되었을 때 실행되는 메소드. 인수값인 함수를 실행시킴(콜백함수)
+    request.done(function( data ) {
+        location.reload();
+    });
+}//end createNaverMember()
 </script>
 </html>

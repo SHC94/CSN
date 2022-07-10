@@ -1,5 +1,6 @@
 package com.csn.csn.member.service;
 
+import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import com.csn.csn.member.dto.MemberLoginDto;
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.entity.Member;
@@ -7,6 +8,8 @@ import com.csn.csn.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,8 +38,25 @@ public class MemberService {
     }
 
     // 회원 가입
-    public void join(MemberJoinDto memberSaveDto) {
-        Member newMember = new Member(memberSaveDto);
-        memberRepository.save(newMember);
+    public void join(MemberJoinDto memberJoinDto) {
+        String newLoginId = memberJoinDto.getLoginId();
+        Optional<Member> findMember = memberRepository.findByLoginId(newLoginId);
+
+        if (findMember.isPresent()) {
+            throw new IllegalArgumentException("중복된 회원이 존재합니다.");
+        }
+        else {
+            memberRepository.save(new Member(memberJoinDto));
+        }
+    }
+
+    public void joinOrLoginWithNaver(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
+        String loginId = memberJoinOrLoginWithNaverDto.getLoginId();
+        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+
+        // 아직 회원가입이 안되어 있다면
+        if (!findMember.isPresent()) {
+            memberRepository.save(new Member(memberJoinOrLoginWithNaverDto));
+        }
     }
 }

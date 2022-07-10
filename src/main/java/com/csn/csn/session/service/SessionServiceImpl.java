@@ -10,6 +10,11 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 public class SessionServiceImpl implements SessionService {
 
+    /**
+     * 세션 연결
+     * @param session
+     * @param sessionRequestVo
+     */
     @Override
     public void connectionSession(HttpSession session, SessionRequestVo sessionRequestVo) {
 
@@ -25,7 +30,6 @@ public class SessionServiceImpl implements SessionService {
         session.setAttribute("profile_image"    , sessionRequestVo.getProfile_image());     //프로필 사진
         session.setAttribute("loginWay"         , sessionRequestVo.getLoginWay());          //로그인 수단
 
-
         // 세션 유지시간 설정(초단위)
         // 60 * 30 = 30분
         //session.setMaxInactiveInterval(30*60);
@@ -34,18 +38,17 @@ public class SessionServiceImpl implements SessionService {
         session.setMaxInactiveInterval(-1);
 
         // 세션에 저장된 값 가져오기
-        SessionRequestVo loginVo = (SessionRequestVo) session.getAttribute("user");
-        log.info("loginVo age = " + loginVo.getAge());
-        log.info("loginVo id = " + loginVo.getId());
-        log.info("loginVo name = " + loginVo.getName());
-
-        String id = (String) session.getAttribute("id");
-        log.info("id = " + id);
-
-
+//        SessionRequestVo loginVo = (SessionRequestVo) session.getAttribute("user");
+//        log.info("loginVo age = " + loginVo.getAge());
+//        log.info("loginVo id = " + loginVo.getId());
+//        log.info("loginVo name = " + loginVo.getName());
 
     }//end connectionSession()
 
+    /**
+     * 세션 종료
+     * @param session
+     */
     @Override
     public void disConnectionSession(HttpSession session) {
         // 세션값 삭제
@@ -54,6 +57,5 @@ public class SessionServiceImpl implements SessionService {
         // 세션 전체 제거, 무효화
         session.invalidate();
     }//end disConnectionSession()
-
 
 }//end class()

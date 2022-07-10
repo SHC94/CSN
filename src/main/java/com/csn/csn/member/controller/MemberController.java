@@ -34,11 +34,13 @@ public class MemberController {
         return "join/joinForm";
     }
 
+
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("MemberJoinDto", new MemberJoinDto());
         return "join/joinForm";
     }
+
 
     @PostMapping("/join")
     public String join(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
@@ -49,11 +51,13 @@ public class MemberController {
         return "redirect:/";
     }
 
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("MemberLoginDto", new MemberLoginDto());
         return "login/loginForm";
     }
+
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute MemberLoginDto memberLoginDto, BindingResult bindingResult) {
@@ -66,7 +70,7 @@ public class MemberController {
         }
         // 로그인 실패
         else {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다. :(");
             return "login/loginForm";
         }
     }

@@ -1,6 +1,8 @@
 package com.csn.csn.member.entity;
 
 import com.csn.csn.member.dto.MemberJoinDto;
+import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
+import com.csn.csn.member.dto.MemberLoginDto;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -37,12 +39,18 @@ public class Member {
         this.phone = phone;
     }
 
-    public Member(MemberJoinDto memberSaveDto) {
-        loginId = memberSaveDto.getLoginId();
-        password = memberSaveDto.getPassword();
-        name = memberSaveDto.getName();
-        birthday = memberSaveDto.getBirthday();
-        email = memberSaveDto.getEmail();
-        phone = memberSaveDto.getPhone();
+    public Member(MemberJoinDto memberJoinDto) {
+        loginId = memberJoinDto.getLoginId();
+        password = memberJoinDto.getPassword();
+        name = memberJoinDto.getName();
+        birthday = memberJoinDto.getBirthday();
+        email = memberJoinDto.getEmail();
+        phone = memberJoinDto.getPhone();
+    }
+
+    public Member(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
+        loginId = memberJoinOrLoginWithNaverDto.getLoginId();
+        email = memberJoinOrLoginWithNaverDto.getEmail();
+        name = memberJoinOrLoginWithNaverDto.getName();
     }
 }

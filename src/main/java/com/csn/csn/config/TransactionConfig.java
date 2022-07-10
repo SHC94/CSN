@@ -14,11 +14,11 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import java.util.Collections;
 
-//@Configuration
+@Configuration
 public class TransactionConfig {
 
     private static final String AOP_TRANSACTION_METHOD_NAME="*";
-    private static final String AOP_TRANSACTION_EXPRESSION="execution(* service.*Impl.*(..))";
+    private static final String AOP_TRANSACTION_EXPRESSION="execution(* com.csn.csn..*ServiceImpl.*(..))";
 
     @Autowired
     private PlatformTransactionManager transactionManager;
