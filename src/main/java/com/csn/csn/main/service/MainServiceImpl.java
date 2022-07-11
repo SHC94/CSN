@@ -20,8 +20,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +94,7 @@ public class MainServiceImpl implements MainService {
     public List<NewsItem> selectNewsList() {
 
         try{
+            //조회만 하면 됨. 일단 API 만들어보려고 해봄.
 
             // API 기본 정보
             String apiURL = naverApiCall.apiBaseInfo(NaverApiConstants.NEWS, "신형철", 10, 1, "date");
@@ -94,30 +102,29 @@ public class MainServiceImpl implements MainService {
             // API CALL
             HashMap<String, Object> result = naverApiCall.apiCall(apiURL, NaverApiConstants.REQUEST_METHOD_GET, clientId, clientSecret);
 
-            Integer responseCode  = (Integer) result.get("responseCode");
-            String responseBody   = (String) result.get("responseBody");
-            log.info("responseCode = " + responseCode);
-            log.info("responseBody = " + responseBody);
+            Integer responseCode    = (Integer) result.get("responseCode");
+            String responseBody     = (String) result.get("responseBody");
+            JSONObject jsonObj      = naverApiCall.NaverApiJsonParsing(responseBody);
+            JSONArray items         = (JSONArray) jsonObj.get("items");
 
-            JSONObject jsonObj = naverApiCall.NaverApiJsonParsing(responseBody);
-            log.info("jsonObj = " + jsonObj.toString());
-            log.info("jsonObj total = " + jsonObj.get("total"));
+            for(int i = 0 ; i < items.size() ; i++) {
+                JSONObject item = (JSONObject) items.get(i);
+                NewsItem newsItem = new NewsItem();
+                newsItem.setTitle((String)item.get("title"));
+                newsItem.setOrigin((String)item.get("originallink"));
+                newsItem.setLink((String)item.get("link"));
+                newsItem.setDescription((String)item.get("description"));
+                newsItem.setPubDate(LocalDateTime.now());
 
-            JSONArray genres = (JSONArray) jsonObj.get("items");
-            String genreNm = "";
+                //아이템 중복 체크
+                Optional<Item> distinctItem = mainRepository.distinctItem(newsItem);
 
-            for(int i=0;i<genres.size();i++) {
-                JSONObject genres_genreNm = (JSONObject) genres.get(i);
-                genreNm += genres_genreNm.get("title")+"/";
-                log.info("genreNm = " + genreNm);
-            }
+                //아이템 값이 중복되지 않은 경우 INSERT
+                if(!distinctItem.isPresent()) {
+                    mainRepository.saveNewsItem(newsItem);
+                }//end if()
 
-//            ObjectMapper mapper = new ObjectMapper();
-//            NaverApiNews newsResponseVo = mapper.readValue(responseBody, NaverApiNews.class);
-
-//            log.info("newsResponseVo1 = " + newsResponseVo.getLastBuildDate());
-//            log.info("newsResponseVo2 = " + newsResponseVo.getItems().get(0));
-
+            }//end for()
 
 
         } catch(Exception e){

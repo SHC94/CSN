@@ -115,8 +115,13 @@ public class NaverApiCall {
         return result;
     }//end apiCall()
 
+    /**
+     * String to JSON Parsing
+     * @param parsingStr
+     * @return
+     * @throws ParseException
+     */
     public JSONObject NaverApiJsonParsing(String parsingStr) throws ParseException {
-
         //1. Parser
         JSONParser jsonParser = new JSONParser();
 
@@ -126,7 +131,6 @@ public class NaverApiCall {
         //3. To JsonObject
         JSONObject jsonObj = (JSONObject) obj;
 
-        log.info("jsonObj = " + jsonObj);
         return jsonObj;
     }//end NaverApiJsonParsing()
 }//end class()

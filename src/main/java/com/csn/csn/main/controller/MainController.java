@@ -82,10 +82,18 @@ public class MainController {
         log.info("MainController selectSearchList start");
         log.info("searchParam = " + searchParam.toString());
 
+        //이게 아니고 search에서 찾아야 함.
         List<Item> items = mainService.selectSearchList(searchParam);
-        for (Item item1 : items) {
-            log.info("item = " + items.toString());
-        }
+
+        for (Item item : items) {
+            log.info("============================================");
+            log.info("item = " + item.getId());
+            log.info("item = " + item.getLastBuildDate());
+            log.info("item = " + item.getPubDate());
+            log.info("item = " + item.getTitle());
+            log.info("item = " + item.getLink());
+        }//end for()
+
         model.addAttribute("items", items);
 
         return "redirect:/home";
