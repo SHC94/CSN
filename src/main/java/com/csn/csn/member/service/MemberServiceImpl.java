@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberServiceImpl {
 
     private final MemberRepository memberRepository;
 
@@ -52,12 +52,11 @@ public class MemberService {
 
     public void joinOrLoginWithNaver(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
         String loginId = memberJoinOrLoginWithNaverDto.getLoginId();
-        Optional<Member> isJoined = memberRepository.findByLoginId(loginId);
+        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
 
-        if (!isJoined.isPresent()) {
+        // 아직 회원가입이 안되어 있다면
+        if (!findMember.isPresent()) {
             memberRepository.save(new Member(memberJoinOrLoginWithNaverDto));
         }
-
-        // 로그인 처리 해야됨...  
     }
 }

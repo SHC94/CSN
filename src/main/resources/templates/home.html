@@ -12,6 +12,8 @@
     <!--바디 영역-->
     <div class="container">
 
+        <input id="sessionId" type="hidden" th:value="${session.id}"/>
+
         <!--메인 검색 영역-->
         <span class="test">
             <input type="text" class="mainSearch" placeholder="검색어를 입력해주세요.">
@@ -102,6 +104,15 @@ $('#btn_logout').on('click', function () {
 
 });
 
+$('.mainSearch').on('focus',function(e){
+    e.preventDefault();
+    console.log('focus');
+    var id = $('#sessionId').val();
+    console.log('id = ' + id);
+
+    selectSearchList(id);
+
+});
 
 /*사용자 정의 함수 =================================================================================================*/
 //네이버 로그인
@@ -192,5 +203,24 @@ function createNaverMember() {
         location.reload();
     });
 }//end createNaverMember()
+
+function selectSearchList(id) {
+    console.log('recentSearchList start');
+
+    var data = {
+        "id" : id
+    }
+
+    var request = $.ajax({
+      url       : "/selectSearchList", 	// 통신할url
+      method    : "POST",			    // 통신할 메서드 타입
+      data      : data,		            // 전송할 데이터
+      dataType  : "html"			    // 전송받은 데이터를 변환시킬 컨텐츠 타입
+    });
+
+    request.done(function( data ) {
+        console.log(JSON.stringify(data));
+    });
+}//end selectSearchList()
 </script>
 </html>

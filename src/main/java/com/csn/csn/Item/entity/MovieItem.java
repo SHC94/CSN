@@ -1,12 +1,13 @@
-package com.csn.csn.search;
+package com.csn.csn.Item.entity;
+
+import lombok.Getter;
 
 import javax.persistence.Entity;
 
 @Entity
+@Getter
 public class MovieItem extends Item {
 
-    private String title;
-    private String link; // 검색 결과 영화의 하이퍼텍스트 link
     private String imageUrl; // 썸네일 이미지 url
     private String subtitle;
     private String director;

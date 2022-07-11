@@ -1,7 +1,9 @@
 package com.csn.csn.main.repository;
 
+import com.csn.csn.Item.entity.Item;
 import com.csn.csn.main.entity.Tab;
 import com.csn.csn.main.vo.LoginForm;
+import com.csn.csn.main.vo.SearchParam;
 import com.csn.csn.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,4 +40,14 @@ public class MainRepository {
                 .setParameter("password", loginForm.getLoginPw())
                 .getResultList();
     }//end membershipFind()
+
+    /**
+     * 최근 검색어 조회
+     * @param searchParam
+     * @return
+     */
+    public List<Item> selectSearchList(SearchParam searchParam) {
+        return em.createQuery("select i from Item i", Item.class)
+                .getResultList();
+    }//end selectSearchList()
 }//end class()

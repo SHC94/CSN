@@ -2,7 +2,7 @@ package com.csn.csn.member.controller;
 
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberLoginDto;
-import com.csn.csn.member.service.MemberService;
+import com.csn.csn.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
 
     @PostMapping("/idCheck")
     public String hasSameId(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
