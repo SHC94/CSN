@@ -1,12 +1,13 @@
 package com.csn.csn.Item.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
+@Getter @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 public abstract class Item {
@@ -20,4 +21,7 @@ public abstract class Item {
 
     @Column(unique = true)
     private String link;
+
+    public Item() {
+    }
 }
