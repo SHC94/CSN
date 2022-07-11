@@ -1,12 +1,12 @@
 package com.csn.csn.Item.repository;
 
-import com.csn.csn.Item.entity.DictionaryItem;
 import com.csn.csn.Item.entity.Item;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
@@ -21,8 +21,9 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Item find(Long itemId) {
-        return em.find(Item.class, itemId);
+    public Optional<Item> find(Long itemId) {
+        Item item = em.find(Item.class, itemId);
+        return Optional.ofNullable(item);
     }
 
     @Override

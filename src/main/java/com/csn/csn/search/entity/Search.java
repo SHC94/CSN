@@ -1,4 +1,4 @@
-package com.csn.csn.search;
+package com.csn.csn.search.entity;
 
 import lombok.Getter;
 
@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Search {
+public class Search { // 검색 할 때
 
     @Id @GeneratedValue
     @Column(name = "search_id")
     private Long id;
 
     private String query;
-    private LocalDateTime buildDate;
+    private LocalDateTime buildDateTime;
 }
