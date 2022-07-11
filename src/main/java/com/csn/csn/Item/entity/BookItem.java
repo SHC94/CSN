@@ -1,11 +1,14 @@
-package com.csn.csn.search;
+package com.csn.csn.Item.entity;
+
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class BookItem extends Item {
-    private String title;
+
     private String imageUrl;
     private String author;
     private String price;

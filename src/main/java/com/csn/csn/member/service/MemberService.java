@@ -52,11 +52,12 @@ public class MemberService {
 
     public void joinOrLoginWithNaver(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
         String loginId = memberJoinOrLoginWithNaverDto.getLoginId();
-        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+        Optional<Member> isJoined = memberRepository.findByLoginId(loginId);
 
-        // 아직 회원가입이 안되어 있다면
-        if (!findMember.isPresent()) {
+        if (!isJoined.isPresent()) {
             memberRepository.save(new Member(memberJoinOrLoginWithNaverDto));
         }
+
+        // 로그인 처리 해야됨...  
     }
 }

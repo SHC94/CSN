@@ -1,12 +1,14 @@
-package com.csn.csn.search;
+package com.csn.csn.Item.entity;
+
+import com.csn.csn.Item.entity.Item;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 
 @Entity
+@Getter
 public class ShoppingItem extends Item {
 
-    private String title;
-    private String link;
     private String imageUrl;
     private Integer lprice; // 최저가
     private Integer hprice; // 최고가
