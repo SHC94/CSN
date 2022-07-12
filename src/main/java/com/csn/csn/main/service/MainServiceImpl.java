@@ -9,6 +9,7 @@ import com.csn.csn.main.repository.MainRepository;
 import com.csn.csn.main.vo.LoginForm;
 import com.csn.csn.main.vo.SearchParam;
 import com.csn.csn.member.entity.Member;
+import com.csn.csn.search.entity.Search;
 import com.csn.csn.session.service.SessionService;
 import com.csn.csn.session.vo.SessionRequestVo;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -79,52 +83,29 @@ public class MainServiceImpl implements MainService {
      * @return
      */
     @Override
-    public List<Item> selectSearchList(SearchParam searchParam) {
+    public List<Search> selectSearchList(SearchParam searchParam) {
         return mainRepository.selectSearchList(searchParam);
     }//end selectSearchList()
 
+    /**
+     * 뉴스 정보 조회 (다건)
+     * @return
+     */
     @Override
     public List<NewsItem> selectNewsList() {
+        List<NewsItem> resultList = new ArrayList<>();
 
         try{
 
-            // API 기본 정보
-            String apiURL = naverApiCall.apiBaseInfo(NaverApiConstants.NEWS, "신형철", 10, 1, "date");
-            log.info("apiURL = " + apiURL);
-            // API CALL
-            HashMap<String, Object> result = naverApiCall.apiCall(apiURL, NaverApiConstants.REQUEST_METHOD_GET, clientId, clientSecret);
-
-            Integer responseCode  = (Integer) result.get("responseCode");
-            String responseBody   = (String) result.get("responseBody");
-            log.info("responseCode = " + responseCode);
-            log.info("responseBody = " + responseBody);
-
-            JSONObject jsonObj = naverApiCall.NaverApiJsonParsing(responseBody);
-            log.info("jsonObj = " + jsonObj.toString());
-            log.info("jsonObj total = " + jsonObj.get("total"));
-
-            JSONArray genres = (JSONArray) jsonObj.get("items");
-            String genreNm = "";
-
-            for(int i=0;i<genres.size();i++) {
-                JSONObject genres_genreNm = (JSONObject) genres.get(i);
-                genreNm += genres_genreNm.get("title")+"/";
-                log.info("genreNm = " + genreNm);
-            }
-
-//            ObjectMapper mapper = new ObjectMapper();
-//            NaverApiNews newsResponseVo = mapper.readValue(responseBody, NaverApiNews.class);
-
-//            log.info("newsResponseVo1 = " + newsResponseVo.getLastBuildDate());
-//            log.info("newsResponseVo2 = " + newsResponseVo.getItems().get(0));
-
-
+            resultList = mainRepository.selectNewsList();
 
         } catch(Exception e){
+
             log.info(e.getMessage());
+
         }//end try ~ catch()
 
-        return null;
+        return resultList;
     }//end selectNewsList()
 
 

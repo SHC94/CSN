@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MemberRepositoryTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberRepositoryImpl memberRepositoryImpl;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -48,7 +48,7 @@ class MemberRepositoryTest {
     @DisplayName("회원을 저장한다.")
     void save() {
         Member member = new Member("lalalalz2", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId = memberRepository.save(member);
+        Long savedMemberId = memberRepositoryImpl.save(member);
     }
 
     @Test
@@ -57,10 +57,10 @@ class MemberRepositoryTest {
     void save_중복아이디() {
         try {
             Member member1 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-            Long savedMemberId1 = memberRepository.save(member1);
+            Long savedMemberId1 = memberRepositoryImpl.save(member1);
 
             Member member2 = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-            Long save = memberRepository.save(member2);
+            Long save = memberRepositoryImpl.save(member2);
 
         } catch (Exception e) {
             System.out.println("e = " + e);
@@ -73,7 +73,7 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("null 회원을 저장한다.")
     void save_error() {
-        assertThatThrownBy(() -> memberRepository.save(null))
+        assertThatThrownBy(() -> memberRepositoryImpl.save(null))
                 .isInstanceOf(NonTransientDataAccessException.class);
     }
 
@@ -83,10 +83,10 @@ class MemberRepositoryTest {
     void findOneById() {
         //given
         Member member = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId = memberRepository.save(member);
+        Long savedMemberId = memberRepositoryImpl.save(member);
 
         //when
-        Optional<Member> findMember = memberRepository.find(savedMemberId);
+        Optional<Member> findMember = memberRepositoryImpl.find(savedMemberId);
 
         //then
         assertThat(member).isEqualTo(findMember.get());
@@ -100,7 +100,7 @@ class MemberRepositoryTest {
         Long savedMemberId = -1L;
 
         //when
-        Optional<Member> findMember = memberRepository.find(savedMemberId);
+        Optional<Member> findMember = memberRepositoryImpl.find(savedMemberId);
 
         //then
         assertThatThrownBy(() -> findMember.get()).isInstanceOf(NoSuchElementException.class);
@@ -112,10 +112,10 @@ class MemberRepositoryTest {
     void findOneByLoginId_있을때() {
         //given
         Member member = new Member("lalalalz2", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId = memberRepository.save(member);
+        Long savedMemberId = memberRepositoryImpl.save(member);
 
         //when
-        Optional<Member> findMember = memberRepository.findByLoginId("lalalalz2");
+        Optional<Member> findMember = memberRepositoryImpl.findByLoginId("lalalalz2");
 
         //then
         assertThat(member.getId()).isEqualTo(findMember.get().getId());
@@ -128,7 +128,7 @@ class MemberRepositoryTest {
         String loginId = "없는 아이디입니다.";
 
         //when
-        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+        Optional<Member> findMember = memberRepositoryImpl.findByLoginId(loginId);
 
         //then
         assertThatThrownBy(() ->findMember.get())
@@ -138,7 +138,7 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("모든 회원을 조회한다.")
     void findAll() {
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepositoryImpl.findAll();
         assertThat(members.size()).isEqualTo(1);
     }
 
@@ -147,13 +147,13 @@ class MemberRepositoryTest {
     void deleteOne() {
         //given
         Member member = new Member("lalalalz", "wlstn4050!", "cjs", LocalDate.now(), "lalalalz@naver.com", "0101");
-        Long savedMemberId = memberRepository.save(member);
+        Long savedMemberId = memberRepositoryImpl.save(member);
 
         //when
-        memberRepository.delete(member);
+        memberRepositoryImpl.delete(member);
 
         //then
-        Optional<Member> findMember = memberRepository.find(savedMemberId);
+        Optional<Member> findMember = memberRepositoryImpl.find(savedMemberId);
         assertThatThrownBy(() -> findMember.get())
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -164,10 +164,10 @@ class MemberRepositoryTest {
         //given
         Member unSavedMember = new Member("go", "asdf", "asdf", LocalDate.now(), "asdf", "asdf"); // 이상한 회원
 
-        memberRepository.delete(unSavedMember);
+        memberRepositoryImpl.delete(unSavedMember);
 
         //when, then
-        assertThatThrownBy(() -> memberRepository.delete(null))
+        assertThatThrownBy(() -> memberRepositoryImpl.delete(null))
                 .isInstanceOf(NonTransientDataAccessException.class);
     }
 }

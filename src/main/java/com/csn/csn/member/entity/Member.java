@@ -2,7 +2,6 @@ package com.csn.csn.member.entity;
 
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
-import com.csn.csn.member.dto.MemberLoginDto;
 import lombok.Getter;
 
 import javax.persistence.Column;
