@@ -16,12 +16,17 @@ public abstract class Item {
     @Column(name = "item_id")
     private Long id;
     private LocalDateTime lastBuildDate; // API 요청하여 데이터를 받아온 시간
-    private LocalDateTime pubDate; // 실제 데이터 생성일자 (네이버 측)
     private String title;
 
     @Column(unique = true)
     private String link;
 
     public Item() {
+    }
+
+    public Item(LocalDateTime lastBuildDate, String title, String link) {
+        this.lastBuildDate = lastBuildDate;
+        this.title = title;
+        this.link = link;
     }
 }

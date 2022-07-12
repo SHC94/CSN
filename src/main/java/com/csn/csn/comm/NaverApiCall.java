@@ -1,5 +1,6 @@
 package com.csn.csn.comm;
 
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -42,25 +43,22 @@ public class NaverApiCall {
      * @throws Exception
      */
     private static String requestParameterSet(String query, Integer display, Integer start, String sort) throws Exception {
-        String requestParam = "";
+        StringBuilder requestParam = new StringBuilder();
 
-        if(!StringUtils.isEmpty(query)) {
+        //검색을 원하는 문자열로서 UTF-8로 인코딩한다.
+        String text = URLEncoder.encode(query,"UTF-8");
+        requestParam.append("query=" + text);
 
-            String text = URLEncoder.encode(query,"UTF-8");
+        //검색 결과 출력 건수 지정
+        requestParam.append("&display=" + display);
 
-            requestParam = "query=" + text              //검색을 원하는 문자열로서 UTF-8로 인코딩한다.
-                        + "&display=" + display         //검색 결과 출력 건수 지정
-                        + "&start=" + start             //검색 시작 위치로 최대 1000까지 가능
-                        + "&sort=" + sort;              //정렬 옵션: sim (유사도순), date (날짜순)
+        //검색 시작 위치로 최대 1000까지 가능
+        requestParam.append("&start=" + start);
 
-        } else {
+        //정렬 옵션: sim (유사도순), date (날짜순)
+        if(sort != null) requestParam.append("&sort=" + sort);
 
-            throw new Exception("필수 값 입력하십쇼.");
-            //1000건 이상도 체크해야함. 일단 패스
-
-        }//end if()
-
-        return requestParam;
+        return requestParam.toString();
     }//end requestParameterSet()
 
 
