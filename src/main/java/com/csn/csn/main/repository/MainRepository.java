@@ -6,12 +6,12 @@ import com.csn.csn.main.entity.Tab;
 import com.csn.csn.main.vo.LoginForm;
 import com.csn.csn.main.vo.SearchParam;
 import com.csn.csn.member.entity.Member;
+import com.csn.csn.search.entity.Search;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +48,11 @@ public class MainRepository {
      * @param searchParam
      * @return
      */
-    public List<Item> selectSearchList(SearchParam searchParam) {
-        return em.createQuery("select i from Item i", Item.class)
+    public List<Search> selectSearchList(SearchParam searchParam) {
+        return em.createQuery("select s from Search s join fetch s.member m where 1=1 and m.loginId = :loginId", Search.class)
+                .setParameter("loginId", searchParam.getId())
+                .setFirstResult(0)
+                .setMaxResults(10)
                 .getResultList();
     }//end selectSearchList()
 
@@ -72,6 +75,14 @@ public class MainRepository {
     /**
      * 뉴스 정보 조회 (다건)
      */
+    public List<NewsItem> selectNewsList() {
+
+        return em.createQuery("select n from NewsItem n where 1=1 order by pub_date", NewsItem.class)
+                .setFirstResult(0)
+                .setMaxResults(9)
+                .getResultList();
+
+    }//end selectNewsList()
 
     /**
      * 뉴스 정보 저장

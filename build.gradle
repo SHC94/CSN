@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.csn'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = "1.9"
+sourceCompatibility = "1.8"
 
 configurations {
 	compileOnly {
@@ -44,4 +44,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-targetCompatibility = JavaVersion.VERSION_1_9
