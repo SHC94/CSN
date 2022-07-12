@@ -3,12 +3,14 @@ package com.csn.csn.member.entity;
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,6 +25,7 @@ public class Member {
 
     private String password;
     private String name;
+
     private LocalDate birthday;
     private String email;
     private String phone;

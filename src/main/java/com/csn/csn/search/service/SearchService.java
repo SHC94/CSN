@@ -1,6 +1,7 @@
 package com.csn.csn.search.service;
 
 import com.csn.csn.member.entity.Member;
+import com.csn.csn.member.repository.MemberRepository;
 import com.csn.csn.search.entity.Search;
 import com.csn.csn.search.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -17,10 +17,13 @@ import java.util.Optional;
 public class SearchService {
 
     private final SearchRepository searchRepository;
+    private final MemberRepository memberRepository;
 
-    public void doSearch(Member member, String query) {
-        Search search = new Search(member, query);
-        searchRepository.save(search);
+    public void doSearch(String loginId, String query) {
+        memberRepository.findByLoginId(loginId)
+                .ifPresent((m) -> {
+                    searchRepository.save(new Search(m, query));
+                });
     }
 
     public List<Search> getRecentSearch(Member member) {

@@ -1,8 +1,10 @@
 package com.csn.csn.member.service;
 
 import com.csn.csn.member.dto.MemberJoinDto;
+import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
+import com.csn.csn.member.dto.MemberLoginDto;
 import com.csn.csn.member.entity.Member;
-import com.csn.csn.member.repository.MemberRepositoryImpl;
+import com.csn.csn.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MemberServiceTest {
 
     @Autowired
-    private MemberRepositoryImpl memberRepositoryImpl;
+    private MemberRepository memberRepository;
     @Autowired
     private MemberServiceImpl memberServiceImpl;
 
@@ -43,7 +45,7 @@ class MemberServiceTest {
         memberServiceImpl.join(memberJoinDto);
 
         //then
-        Optional<Member> findMember = memberRepositoryImpl.findByLoginId("lalalalz2");
+        Optional<Member> findMember = memberRepository.findByLoginId("lalalalz2");
         assertThat("lalalalz2").isEqualTo(findMember.get().getLoginId());
 
     }
@@ -74,42 +76,122 @@ class MemberServiceTest {
         // then
         assertThatThrownBy(() -> memberServiceImpl.join(memberJoinDto2))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 회원이 존재합니다.");
+                .hasMessage("중복된 회원 아이디가 존재합니다.");
     }
 
-//    @Test
-//    @DisplayName("네이버 회원 연동 로그인 - 회원가입")
-//    void naverLoginWithJoin() {
-//        // given
-//        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
-//        memberDto.setLoginId("네이버 발급 테스트 아이디");
-//        memberDto.setName("네이버 로그인 테스트");
-//        memberDto.setEmail("네이버 로그인 테스트 이메일");
-//
-//        // when
-//        memberService.joinOrLoginWithNaver(memberDto);
-//        Optional<Member> findMember = memberRepositoryImpl.findByLoginId("네이버 발급 테스트 아이디");
-//
-//        // then
-//        String findLoginId = findMember.get().getLoginId();
-//        assertThat(findLoginId).isEqualTo("네이버 발급 테스트 아이디");
-//    }
-//
-//    @Test
-//    @DisplayName("네이버 회원 연동 로그인 - 이미 회원가입 상태")
-//    void naverLoginWithjoin_error() {
-//        // given
-//        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
-//        memberDto.setLoginId("네이버 발급 테스트 아이디1");
-//        memberDto.setName("네이버 로그인 테스트1");
-//        memberDto.setEmail("네이버 로그인 테스트 이메일1");
-//
-//        // when
-//        memberService.joinOrLoginWithNaver(memberDto);
-//        memberService.joinOrLoginWithNaver(memberDto);
-//
-//        // then
-////        assertThatThrownBy(() -> memberService.joinOrLoginWithNaver(memberDto))
-////                .doesNotThrowAnyException();
-//    }
+    @Test
+    @DisplayName("네이버 회원 연동 로그인 - 회원가입")
+    void naverLoginWithJoin() {
+        // given
+        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
+        memberDto.setLoginId("네이버 발급 테스트 아이디");
+        memberDto.setName("네이버 로그인 테스트");
+        memberDto.setEmail("네이버 로그인 테스트 이메일");
+
+        // when
+        memberServiceImpl.joinOrLoginWithNaver(memberDto);
+        Member findMember = memberRepository.findByLoginId("네이버 발급 테스트 아이디")
+                .orElse(null);
+
+        // then
+        assertThat(findMember).isNotNull();
+        assertThat(findMember.getLoginId()).isEqualTo("네이버 발급 테스트 아이디");
+    }
+
+    @Test
+    @DisplayName("네이버 회원 연동 로그인 - 이미 회원가입 상태")
+    void naverLoginWithjoin_error() {
+        // given
+        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
+        memberDto.setLoginId("네이버 발급 테스트 아이디1");
+        memberDto.setName("네이버 로그인 테스트1");
+        memberDto.setEmail("네이버 로그인 테스트 이메일1");
+
+        // when
+        memberServiceImpl.joinOrLoginWithNaver(memberDto);
+        memberServiceImpl.joinOrLoginWithNaver(memberDto);
+
+        // then
+        assertThat(1).isEqualTo(memberRepository.findAll()
+                .stream()
+                .filter((m) -> m.getLoginId().equals("네이버 발급 테스트 아이디1"))
+                .count()
+        );
+    }
+
+    @Test
+    @DisplayName("로그인 - 로그인 성공")
+    void login() {
+        // given
+        MemberJoinDto memberJoinDto = new MemberJoinDto();
+        memberJoinDto.setLoginId("lalalalz");
+        memberJoinDto.setPassword("hello!123");
+        memberServiceImpl.join(memberJoinDto);
+
+        // when
+        MemberLoginDto memberLoginDto = new MemberLoginDto();
+        memberLoginDto.setLoginId("lalalalz");
+        memberLoginDto.setPassword("hello!123");
+        boolean isLoggedIn = memberServiceImpl.canLogIn(memberLoginDto);
+
+        //then
+        assertThat(isLoggedIn).isTrue();
+    }
+
+    @Test
+    @DisplayName("로그인 - 로그인 실패(아이디 맞지 않음)")
+    void login_error1() {
+        // given
+        MemberJoinDto memberJoinDto = new MemberJoinDto();
+        memberJoinDto.setLoginId("lalalalz");
+        memberJoinDto.setPassword("hello!123");
+        memberServiceImpl.join(memberJoinDto);
+
+        // when
+        MemberLoginDto memberLoginDto = new MemberLoginDto();
+        memberLoginDto.setLoginId("lalalalz1");
+        memberLoginDto.setPassword("hello!123");
+        boolean isLoggedIn = memberServiceImpl.canLogIn(memberLoginDto);
+
+        //then
+        assertThat(isLoggedIn).isFalse();
+    }
+
+    @Test
+    @DisplayName("로그인 - 로그인 실패(비밀번호 맞지 않음)")
+    void login_error2() {
+        // given
+        MemberJoinDto memberJoinDto = new MemberJoinDto();
+        memberJoinDto.setLoginId("lalalalz");
+        memberJoinDto.setPassword("hello!123");
+        memberServiceImpl.join(memberJoinDto);
+
+        // when
+        MemberLoginDto memberLoginDto = new MemberLoginDto();
+        memberLoginDto.setLoginId("lalalalz");
+        memberLoginDto.setPassword("hello!12");
+        boolean isLoggedIn = memberServiceImpl.canLogIn(memberLoginDto);
+
+        //then
+        assertThat(isLoggedIn).isFalse();
+    }
+
+    @Test
+    @DisplayName("로그인 - 로그인 실패(아이디, 비밀번호 맞지 않음)")
+    void login_error3() {
+        // given
+        MemberJoinDto memberJoinDto = new MemberJoinDto();
+        memberJoinDto.setLoginId("lalalalz");
+        memberJoinDto.setPassword("hello!123");
+        memberServiceImpl.join(memberJoinDto);
+
+        // when
+        MemberLoginDto memberLoginDto = new MemberLoginDto();
+        memberLoginDto.setLoginId("lalalalz1");
+        memberLoginDto.setPassword("hello!12");
+        boolean isLoggedIn = memberServiceImpl.canLogIn(memberLoginDto);
+
+        //then
+        assertThat(isLoggedIn).isFalse();
+    }
 }

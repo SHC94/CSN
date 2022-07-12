@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,10 +17,9 @@ public class MemberServiceImpl {
     private final MemberRepository memberRepository;
 
     // 회원 로그인 시도
-    public boolean isLoggedIn(MemberLoginDto memberLoginDto) {
+    public boolean canLogIn(MemberLoginDto memberLoginDto) {
         String loginId = memberLoginDto.getLoginId();
         String password = memberLoginDto.getPassword();
-
         Member findMember = memberRepository
                 .findByLoginId(loginId)
                 .filter((m) -> m.getPassword().equals(password))
@@ -31,32 +28,24 @@ public class MemberServiceImpl {
         return findMember != null ? true : false;
     }
 
-    // 회원 아이디 중복 체크
-    public boolean hasSameId(String loginId) {
-        Member findMember = memberRepository.findByLoginId(loginId).orElse(null);
-        return findMember != null ? true : false;
-    }
-
     // 회원 가입
     public void join(MemberJoinDto memberJoinDto) {
         String newLoginId = memberJoinDto.getLoginId();
-        Optional<Member> findMember = memberRepository.findByLoginId(newLoginId);
-
-        if (findMember.isPresent()) {
-            throw new IllegalArgumentException("중복된 회원이 존재합니다.");
-        }
-        else {
-            memberRepository.save(new Member(memberJoinDto));
-        }
+        memberRepository.findByLoginId(newLoginId)
+                .ifPresentOrElse((m) -> {
+                    throw new IllegalArgumentException("중복된 회원 아이디가 존재합니다.");
+                    }, () -> {
+                    memberRepository.save(new Member(memberJoinDto));
+                });
     }
 
     public void joinOrLoginWithNaver(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
         String loginId = memberJoinOrLoginWithNaverDto.getLoginId();
-        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
-
-        // 아직 회원가입이 안되어 있다면
-        if (!findMember.isPresent()) {
-            memberRepository.save(new Member(memberJoinOrLoginWithNaverDto));
-        }
+        memberRepository.findByLoginId(loginId)
+                .ifPresentOrElse((m) -> {
+                    // do nothing...
+                }, () -> {
+                    memberRepository.save(new Member(memberJoinOrLoginWithNaverDto));
+                });
     }
 }
