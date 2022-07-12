@@ -1,5 +1,6 @@
 package com.csn.csn.search.repository;
 
+import com.csn.csn.member.entity.Member;
 import com.csn.csn.search.entity.Search;
 
 import java.time.LocalDateTime;
@@ -13,11 +14,11 @@ public interface SearchRepository {
 
     List<Search> findAll();
 
-//    List<Search> findByMemberId(Long memberId); 필요성 검토
+    List<Search> findByMember(Member member, Integer limit);
 
-    List<Search> findByQuery(String query);
+    List<Search> findByQuery(String query, Integer limit);
 
-    List<Search> findByBuildTime(LocalDateTime localDateTime);
+    List<Search> findByBuildTime(LocalDateTime localDateTime, Integer limit);
 
     void delete(Search search);
 

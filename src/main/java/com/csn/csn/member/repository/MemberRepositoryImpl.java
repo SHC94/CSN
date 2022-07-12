@@ -1,5 +1,6 @@
 package com.csn.csn.member.repository;
 
+import com.csn.csn.exception.DuplicatedLoginIdException;
 import com.csn.csn.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
