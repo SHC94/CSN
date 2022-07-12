@@ -1,9 +1,8 @@
 package com.csn.csn.member.service;
 
 import com.csn.csn.member.dto.MemberJoinDto;
-import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import com.csn.csn.member.entity.Member;
-import com.csn.csn.member.repository.MemberRepository;
+import com.csn.csn.member.repository.MemberRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MemberServiceTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberRepositoryImpl memberRepositoryImpl;
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberServiceImpl;
 
     @Test
 //    @Rollback(value = false)
@@ -41,10 +40,10 @@ class MemberServiceTest {
         memberJoinDto.setName("test1");
 
         //when
-        memberService.join(memberJoinDto);
+        memberServiceImpl.join(memberJoinDto);
 
         //then
-        Optional<Member> findMember = memberRepository.findByLoginId("lalalalz2");
+        Optional<Member> findMember = memberRepositoryImpl.findByLoginId("lalalalz2");
         assertThat("lalalalz2").isEqualTo(findMember.get().getLoginId());
 
     }
@@ -70,47 +69,47 @@ class MemberServiceTest {
         memberJoinDto2.setName("test1");
 
         // when
-        memberService.join(memberJoinDto1);
+        memberServiceImpl.join(memberJoinDto1);
 
         // then
-        assertThatThrownBy(() -> memberService.join(memberJoinDto2))
+        assertThatThrownBy(() -> memberServiceImpl.join(memberJoinDto2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("중복된 회원이 존재합니다.");
     }
 
-    @Test
-    @DisplayName("네이버 회원 연동 로그인 - 회원가입")
-    void naverLoginWithJoin() {
-        // given
-        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
-        memberDto.setLoginId("네이버 발급 테스트 아이디");
-        memberDto.setName("네이버 로그인 테스트");
-        memberDto.setEmail("네이버 로그인 테스트 이메일");
-
-        // when
-        memberService.joinOrLoginWithNaver(memberDto);
-        Optional<Member> findMember = memberRepository.findByLoginId("네이버 발급 테스트 아이디");
-
-        // then
-        String findLoginId = findMember.get().getLoginId();
-        assertThat(findLoginId).isEqualTo("네이버 발급 테스트 아이디");
-    }
-
-    @Test
-    @DisplayName("네이버 회원 연동 로그인 - 이미 회원가입 상태")
-    void naverLoginWithjoin_error() {
-        // given
-        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
-        memberDto.setLoginId("네이버 발급 테스트 아이디1");
-        memberDto.setName("네이버 로그인 테스트1");
-        memberDto.setEmail("네이버 로그인 테스트 이메일1");
-
-        // when
-        memberService.joinOrLoginWithNaver(memberDto);
-        memberService.joinOrLoginWithNaver(memberDto);
-
-        // then
-//        assertThatThrownBy(() -> memberService.joinOrLoginWithNaver(memberDto))
-//                .doesNotThrowAnyException();
-    }
+//    @Test
+//    @DisplayName("네이버 회원 연동 로그인 - 회원가입")
+//    void naverLoginWithJoin() {
+//        // given
+//        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
+//        memberDto.setLoginId("네이버 발급 테스트 아이디");
+//        memberDto.setName("네이버 로그인 테스트");
+//        memberDto.setEmail("네이버 로그인 테스트 이메일");
+//
+//        // when
+//        memberService.joinOrLoginWithNaver(memberDto);
+//        Optional<Member> findMember = memberRepositoryImpl.findByLoginId("네이버 발급 테스트 아이디");
+//
+//        // then
+//        String findLoginId = findMember.get().getLoginId();
+//        assertThat(findLoginId).isEqualTo("네이버 발급 테스트 아이디");
+//    }
+//
+//    @Test
+//    @DisplayName("네이버 회원 연동 로그인 - 이미 회원가입 상태")
+//    void naverLoginWithjoin_error() {
+//        // given
+//        MemberJoinOrLoginWithNaverDto memberDto = new MemberJoinOrLoginWithNaverDto();
+//        memberDto.setLoginId("네이버 발급 테스트 아이디1");
+//        memberDto.setName("네이버 로그인 테스트1");
+//        memberDto.setEmail("네이버 로그인 테스트 이메일1");
+//
+//        // when
+//        memberService.joinOrLoginWithNaver(memberDto);
+//        memberService.joinOrLoginWithNaver(memberDto);
+//
+//        // then
+////        assertThatThrownBy(() -> memberService.joinOrLoginWithNaver(memberDto))
+////                .doesNotThrowAnyException();
+//    }
 }

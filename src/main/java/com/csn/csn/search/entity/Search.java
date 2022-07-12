@@ -1,11 +1,9 @@
 package com.csn.csn.search.entity;
 
+import com.csn.csn.member.entity.Member;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +14,9 @@ public class Search { // 검색 할 때
     @Column(name = "search_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "search_id")
+    private Member member;
     private String query;
     private LocalDateTime buildDateTime;
 }
