@@ -19,4 +19,12 @@ public class Search { // 검색 할 때
     private Member member;
     private String query;
     private LocalDateTime buildDateTime;
+
+    protected Search() {}
+
+    public Search(Member member, String query) {
+        this.member = member;
+        this.query = query;
+        this.buildDateTime = LocalDateTime.now();
+    }
 }

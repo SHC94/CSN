@@ -1,5 +1,6 @@
 package com.csn.csn.search.repository;
 
+import com.csn.csn.member.entity.Member;
 import com.csn.csn.search.entity.Search;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,8 @@ public class SearchRepositoryImpl implements SearchRepository {
         return em.find(Search.class, searchId);
     }
 
+
+
     @Override
     public List<Search> findAll() {
         String jpql = "select s from Search s";
@@ -33,18 +36,38 @@ public class SearchRepositoryImpl implements SearchRepository {
     }
 
     @Override
-    public List<Search> findByQuery(String query) {
-        String jpql = "select s from Search s where s.query = :query";
+    public List<Search> findByMember(Member member, Integer limit) {
+        String jpql = "select s from Search s " +
+                "where s.member = :member " +
+                "order by s.buildDateTime desc";
+
         return em.createQuery(jpql, Search.class)
-                .setParameter("query", query)
+                .setParameter("member", member)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
     @Override
-    public List<Search> findByBuildTime(LocalDateTime buildDateTime) {
-        String jpql = "select s from Search s where s.buildDateTime = :buildDateTime";
+    public List<Search> findByQuery(String query, Integer limit) {
+        String jpql = "select s from Search s " +
+                "where s.query = :query " +
+                "order by s.buildDateTime desc";
+
+        return em.createQuery(jpql, Search.class)
+                .setParameter("query", query)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    @Override
+    public List<Search> findByBuildTime(LocalDateTime buildDateTime, Integer limit) {
+        String jpql = "select s from Search s " +
+                "where s.buildDateTime >= :buildDateTime " +
+                "order by s.buildDateTime desc";
+
         return em.createQuery(jpql, Search.class)
                 .setParameter("buildDateTime", buildDateTime)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
