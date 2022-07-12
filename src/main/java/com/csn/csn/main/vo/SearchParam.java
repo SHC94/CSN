@@ -5,4 +5,6 @@ import lombok.Data;
 @Data
 public class SearchParam {
     private String id;
+    private String query;
+
 }

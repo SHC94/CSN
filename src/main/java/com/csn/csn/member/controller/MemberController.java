@@ -12,6 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Slf4j
 @Controller("/members")
 @RequiredArgsConstructor
@@ -19,24 +22,26 @@ public class MemberController {
 
     private final MemberServiceImpl memberService;
 
-    @PostMapping("/idCheck")
-    public String hasSameId(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
-        String loginId = memberJoinDto.getLoginId();
-
-        if (memberService.hasSameId(loginId) == true) {
-            bindingResult.reject("idCheckFail", "중복된 아이디가 있습니다. :(");
-        }
-        else {
-            bindingResult.reject("idCheckSuccess", "올바른 아이디 입니다 :)");
-        }
-
-        return "join/joinForm";
-    }
+//    @PostMapping("/idCheck")
+//    public String hasSameId(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
+//        String loginId = memberJoinDto.getLoginId();
+//
+//        if (memberService.hasSameId(loginId) == true) {
+//            bindingResult.reject("idCheckFail", "중복된 아이디가 있습니다. :(");
+//        }
+//        else {
+//            bindingResult.reject("idCheckSuccess", "올바른 아이디 입니다 :)");
+//        }
+//
+//        return "join/joinForm";
+//    }
 
 
     @GetMapping("/join")
     public String joinForm(Model model) {
-        model.addAttribute("MemberJoinDto", new MemberJoinDto());
+        MemberJoinDto memberJoinDto = new MemberJoinDto();
+        memberJoinDto.setBirthday(LocalDate.now());
+        model.addAttribute("memberJoinDto", memberJoinDto);
         return "join/joinForm";
     }
 
@@ -44,6 +49,9 @@ public class MemberController {
     @PostMapping("/join")
     public String join(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
         // 요청 파라미터 유효성 체크
+        log.info("=============회원 가입 로직입니다=============");
+        log.info("{}", bindingResult);
+        log.info("=============회원 가입 로직입니다=============");
         if(bindingResult.hasErrors()) return "join/joinForm";
 
         memberService.join(memberJoinDto);
@@ -58,21 +66,21 @@ public class MemberController {
     }
 
 
-    @PostMapping("/login")
-    public String login(@Validated @ModelAttribute MemberLoginDto memberLoginDto, BindingResult bindingResult) {
-        // 요청 파라미터 유효성 검사
-        if (bindingResult.hasErrors()) return "login/loginForm";
-
-        // 로그인 성공
-        if (memberService.isLoggedIn(memberLoginDto) == true) {
-            return "redirect:/";
-        }
-        // 로그인 실패
-        else {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다. :(");
-            return "login/loginForm";
-        }
-    }
+//    @PostMapping("/login")
+//    public String login(@Validated @ModelAttribute MemberLoginDto memberLoginDto, BindingResult bindingResult) {
+//        // 요청 파라미터 유효성 검사
+//        if (bindingResult.hasErrors()) return "login/loginForm";
+//
+//        // 로그인 성공
+//        if (memberService.isLoggedIn(memberLoginDto) == true) {
+//            return "redirect:/";
+//        }
+//        // 로그인 실패
+//        else {
+//            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다. :(");
+//            return "login/loginForm";
+//        }
+//    }
 
     @ResponseBody
     @PostMapping("/join-naver")

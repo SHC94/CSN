@@ -4,7 +4,7 @@
 }
 
 /*검색 영역*/
-.mainSearch {
+.mainSearch, .encyclopediaSearch {
     display: inline-block;
     height: 40px;
     padding: 0 10px;
@@ -15,7 +15,7 @@
     border-radius: 5px;
 }
 
-.mainSearchBtn {
+.mainSearchBtn, .encyclopediaSearchBtn {
     display: inline-block;
     padding: 10px 20px;
     color: #fff;
@@ -28,7 +28,7 @@
 }
 
 /*탭 영역*/
-.menu_tab {
+.menu_tab, .main_dashboard {
     width : 50%;
     margin-top: 20px;
     margin-left: 10%;
