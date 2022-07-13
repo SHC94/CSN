@@ -103,11 +103,37 @@ $('.encyclopediaSearchBtn').on('click', function() {
           url       : "/encyclopedia/search",   // 통신할url
           data      : data,                     // 데이터
           method    : "POST",			        // 통신할 메서드 타입
-          dataType  : "html"			        // 전송받은 데이터를 변환시킬 컨텐츠 타입
+          dataType  : "json"			        // 전송받은 데이터를 변환시킬 컨텐츠 타입
         });
 
         request.done(function( data ) {
             console.log('성공따리 성공따');
+            console.log(JSON.stringify(data));
+
+            $("#list").empty();
+            $(".dictionary_dashboard").empty();
+
+            $(data).each(function(){
+                var link        = this.link;
+                var title       = this.title;
+                var thumbnail   = this.thumbnail;
+                var description = this.description;
+                console.log('link = ' + link);
+                console.log('title = ' + title);
+                console.log('thumbnail = ' + thumbnail);
+                console.log('description = ' + description);
+
+                $(".dictionary_dashboard").append("<div class='dictionary_area' style='text-align: left'>"
+                            + "<a th:href=" + link + ">"
+                            + "<span>" + title + "</span>"
+                            + "</a><br>"
+                            + "<img th:src=" + thumbnail + "><br>"
+                            + "<span>" + description + "</span><br>"
+                            + "</div>"
+                            + "<hr>"
+                );
+
+            });
         });
 
     }//end if()

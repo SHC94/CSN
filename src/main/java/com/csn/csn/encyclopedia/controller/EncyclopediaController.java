@@ -51,6 +51,9 @@ public class EncyclopediaController {
         //백과사전 데이터 조회
         List<DictionaryItem> dictionaryList = encyclopediaService.selectSearchDict(searchParam);
 
+        for (DictionaryItem dictionaryItem : dictionaryList) {
+            log.info(dictionaryItem.toString());
+        }
         return dictionaryList;
     }//end selectSearchDict()
 
