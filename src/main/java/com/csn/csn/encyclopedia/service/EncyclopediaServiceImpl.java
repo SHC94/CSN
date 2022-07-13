@@ -65,6 +65,7 @@ public class EncyclopediaServiceImpl implements EncyclopediaService {
             searchService.doSearch(searchParam.getId(), searchParam.getQuery());
 
             //4. data Select
+            resultList = encyclopediaRepository.selectSearchDict(searchParam);
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());

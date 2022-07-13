@@ -2,6 +2,7 @@ package com.csn.csn.encyclopedia.repository;
 
 import com.csn.csn.Item.entity.DictionaryItem;
 import com.csn.csn.Item.entity.Item;
+import com.csn.csn.main.vo.SearchParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,24 @@ public class EncyclopediaRepository {
     }//end distinctItem()
 
 
+    /**
+     * 백과사전 ITEM 저장
+     * @param item
+     */
     public void saveDictionaryItem(Item item) {
         em.persist(item);
     }//end saveDictionaryItem()
+
+    /**
+     * 백과사전 데이터 조회 (조건)
+     * @param searchParam
+     * @return
+     */
+    public List<DictionaryItem> selectSearchDict(SearchParam searchParam) {
+        return em.createQuery("select d from DictionaryItem d where 1=1 and (title like :query or description like :query) order by last_build_date desc", DictionaryItem.class)
+                .setParameter("query", "%" + searchParam.getQuery() + "%")
+                .setFirstResult(0)
+                .setMaxResults(5)
+                .getResultList();
+    }//end selectSearchDict()
 }//end class()

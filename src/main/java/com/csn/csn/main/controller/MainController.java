@@ -83,11 +83,6 @@ public class MainController {
 
         List<Search> searchList = mainService.selectSearchList(searchParam);
 
-        for (Search search : searchList) {
-            log.info("============================================");
-            log.info("{} " + search.getId());
-        }//end for()
-
         return searchList;
     }//end selectSearchList()
 
