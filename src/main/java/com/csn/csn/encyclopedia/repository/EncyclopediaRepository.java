@@ -21,9 +21,9 @@ public class EncyclopediaRepository {
      * @return
      */
     public List<DictionaryItem> selectDictionaryList() {
-        return em.createQuery("select d from DictionaryItem d where 1=1 order by last_build_date", DictionaryItem.class)
-                .setFirstResult(0)
-                .setMaxResults(10)
+        return em.createQuery("select d from DictionaryItem d where 1=1 order by last_build_date desc", DictionaryItem.class)
+                .setFirstResult(1)
+                .setMaxResults(5)
                 .getResultList();
     }//end selectDictionaryList()
 

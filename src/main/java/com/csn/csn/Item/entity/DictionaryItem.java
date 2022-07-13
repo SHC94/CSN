@@ -6,6 +6,8 @@ import lombok.ToString;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @DiscriminatorValue(value = "dictionary")
 public class DictionaryItem extends Item {
     private String description;
+
+    @Lob
     private String thumbnail;
 
     protected DictionaryItem() {}
