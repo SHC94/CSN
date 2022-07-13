@@ -132,6 +132,7 @@ $('.mainSearch').on('focusout',function(e){
 
 });
 
+//최근 검색어 목록 클릭 이벤트
 $(document).on("click",".selectQuery",function(){
     var inputData = $(this).text();
     $('.mainSearch').val(inputData);

@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.*;
 
