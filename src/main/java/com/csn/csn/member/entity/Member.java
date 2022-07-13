@@ -22,10 +22,8 @@ public class Member {
 
     @Column(unique = true)
     private String loginId;
-
     private String password;
     private String name;
-
     private LocalDate birthday;
     private String email;
     private String phone;

@@ -66,7 +66,9 @@
             <div th:if="${session.user!=null}">
                 로그인 정보 출력이다
                 <div id="loginInfo" align="left">
-                    <p>이름 : <span th:text="${session.name}"></span></p>
+                    <p>이름 : <a th:href="@{/profile}">
+                                <span th:text="${session.name}"></span></a>
+                    </p>
                     <p>ID : <span th:text="${session.id}"></span></p>
                     <p>email : <span th:text="${session.email}"></span></p>
                     <button id='btn_logout'>로그아웃</button>
