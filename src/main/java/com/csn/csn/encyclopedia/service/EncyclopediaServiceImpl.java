@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -64,6 +65,7 @@ public class EncyclopediaServiceImpl implements EncyclopediaService {
             searchService.doSearch(searchParam.getId(), searchParam.getQuery());
 
             //4. data Select
+            resultList = encyclopediaRepository.selectSearchDict(searchParam);
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());

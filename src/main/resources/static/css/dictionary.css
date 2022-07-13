@@ -1,0 +1,21 @@
+.container {
+    text-align: center;
+}
+
+
+.dictionary_search, .dictionary_area {
+    text-align: left
+}
+
+.dictionary_search {
+    float: left;
+    width: 60%;
+    margin-left: 10%;
+    margin-top: 3%;
+}
+
+.dictionary_favorite {
+    float: right;
+    margin-right: 10%;
+    margin-top: 3%;
+}
