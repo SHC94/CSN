@@ -62,6 +62,24 @@
            value="010-1234-5678" readonly/>
   </div>
 
+  <hr class="my-4"/>
+
+  <div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>검색어</th>
+        <th>검색날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="search : ${searchList}">
+        <td th:text="${search.query}"></td>
+        <td th:text="${search.buildDateTime}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 </body>
 </html>

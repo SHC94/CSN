@@ -36,10 +36,10 @@ public class MainController {
     public String mainHome(Model model, HttpSession session) {
         log.info("MainController mainHome start ===================");
         List<Tab> tabList = mainService.selectTab(); 
-        List<NewsItem> newsList = mainService.selectNewsList();
+//        List<NewsItem> newsList = mainService.selectNewsList();
 
         model.addAttribute("tabList"    , tabList);             //탭 메뉴 조회
-        model.addAttribute("newsList"   , newsList);           //뉴스 스탠드 조회
+//        model.addAttribute("newsList"   , newsList);           //뉴스 스탠드 조회
         model.addAttribute("loginForm"  , new LoginForm());   //로그인 정보
 
         return "home";

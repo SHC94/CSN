@@ -3,7 +3,12 @@ package com.csn.csn.member.controller;
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import com.csn.csn.member.dto.MemberLoginDto;
+import com.csn.csn.member.entity.Member;
+import com.csn.csn.member.repository.MemberRepository;
 import com.csn.csn.member.service.MemberServiceImpl;
+import com.csn.csn.search.entity.Search;
+import com.csn.csn.search.repository.SearchRepository;
+import com.csn.csn.search.service.SearchService;
 import com.csn.csn.session.vo.SessionRequestVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @Controller("/members")
@@ -25,6 +31,8 @@ import java.time.LocalDate;
 public class MemberController {
 
     private final MemberServiceImpl memberService;
+    private final MemberRepository memberRepository;
+    private final SearchService searchService;
 
 //    @PostMapping("/idCheck")
 //    public String hasSameId(@Validated @ModelAttribute MemberJoinDto memberJoinDto, BindingResult bindingResult) {
@@ -95,15 +103,14 @@ public class MemberController {
 
     @GetMapping("/profile")
     public String profile(HttpSession httpSession, Model model) {
-        log.info("=========프로필 컨트롤러=========");
+        SessionRequestVo sessionInfo = (SessionRequestVo)httpSession.getAttribute("user");
 
-        SessionRequestVo member = (SessionRequestVo)httpSession.getAttribute("user");
-        String profile_image = (String)httpSession.getAttribute("profile_image");
+        String loginId = sessionInfo.getId();
+        Member findMember = memberRepository.findByLoginId(loginId).orElse(null);
+        List<Search> recentSearch = searchService.getRecentSearch(findMember);
 
-        model.addAttribute("profile_image", profile_image);
-        model.addAttribute("member", member);
-
-        log.info("프로필 이미지 url : {}", profile_image);
+        model.addAttribute("member", sessionInfo);
+        model.addAttribute("searchList", recentSearch);
 
         return "profile/profileForm";
     }
