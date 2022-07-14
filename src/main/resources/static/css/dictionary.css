@@ -19,3 +19,11 @@
     margin-right: 10%;
     margin-top: 3%;
 }
+
+.dictionary_favorite {
+    border : 1px solid black;
+}
+
+.searchRank {
+    margin-bottom: 5px;
+}

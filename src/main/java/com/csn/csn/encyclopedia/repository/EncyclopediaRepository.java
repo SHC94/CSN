@@ -2,14 +2,14 @@ package com.csn.csn.encyclopedia.repository;
 
 import com.csn.csn.Item.entity.DictionaryItem;
 import com.csn.csn.Item.entity.Item;
+import com.csn.csn.encyclopedia.vo.PopularSearch;
 import com.csn.csn.main.vo.SearchParam;
+import com.csn.csn.search.entity.Search;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.Dictionary;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -62,4 +62,28 @@ public class EncyclopediaRepository {
                 .setMaxResults(5)
                 .getResultList();
     }//end selectSearchDict()
+
+    /**
+     * 인기 검색어
+     * @return
+     */
+    public List<PopularSearch> popularSearch() {
+        List<PopularSearch> resultList = new ArrayList<>();
+
+        List<PopularSearch> list = em.createQuery("select s.query as query, count(*) as cnt from Search s where 1=1 group by query order by count(*) desc")
+                .setFirstResult(0)
+                .setMaxResults(10)
+                .getResultList();
+
+        for(int a = 0 ; a < list.size() ; a++) {
+            Object o = list.get(a);
+            Object[] result = (Object[]) o;
+            PopularSearch popularSearch = new PopularSearch();
+            popularSearch.setQuery(String.valueOf(result[0]));
+            popularSearch.setRank((a + 1));
+            resultList.add(popularSearch);
+        }//end for()
+
+        return resultList;
+    }//end popularSearch()
 }//end class()

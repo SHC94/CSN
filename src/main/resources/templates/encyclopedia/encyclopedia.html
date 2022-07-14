@@ -38,8 +38,12 @@
         </div>
 
         <!--인기검색어, 인기브랜드-->
-        <div class="dictionary_favorite">
-            인기검색어, 인기브랜드
+        <div class="dictionary_favorite" align="left">
+            <span>검색어 순위</span>
+            <div class="searchRank" th:each="popular : ${popularSearch}">
+                <span th:text="${popular.rank}"></span>
+                <span th:text="${popular.query}"></span>
+            </div>
         </div>
     </div>
 
