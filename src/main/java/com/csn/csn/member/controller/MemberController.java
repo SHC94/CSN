@@ -4,16 +4,20 @@ import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import com.csn.csn.member.dto.MemberLoginDto;
 import com.csn.csn.member.service.MemberServiceImpl;
+import com.csn.csn.session.vo.SessionRequestVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Controller("/members")
@@ -52,7 +56,7 @@ public class MemberController {
         log.info("=============회원 가입 로직입니다=============");
         log.info("{}", bindingResult);
         log.info("=============회원 가입 로직입니다=============");
-        if(bindingResult.hasErrors()) return "join/joinForm";
+        if (bindingResult.hasErrors()) return "join/joinForm";
 
         memberService.join(memberJoinDto);
         return "redirect:/";
@@ -88,4 +92,20 @@ public class MemberController {
         memberService.joinOrLoginWithNaver(memberJoinOrLoginWithNaverDto);
         return "성공";
     }
+
+    @GetMapping("/profile")
+    public String profile(HttpSession httpSession, Model model) {
+        log.info("=========프로필 컨트롤러=========");
+
+        SessionRequestVo member = (SessionRequestVo)httpSession.getAttribute("user");
+        String profile_image = (String)httpSession.getAttribute("profile_image");
+
+        model.addAttribute("profile_image", profile_image);
+        model.addAttribute("member", member);
+
+        log.info("프로필 이미지 url : {}", profile_image);
+
+        return "profile/profileForm";
+    }
 }
+

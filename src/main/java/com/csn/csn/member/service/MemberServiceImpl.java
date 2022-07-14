@@ -1,15 +1,16 @@
 package com.csn.csn.member.service;
 
+import com.csn.csn.member.dto.MemberDto;
 import com.csn.csn.member.dto.MemberJoinDto;
 import com.csn.csn.member.dto.MemberJoinOrLoginWithNaverDto;
 import com.csn.csn.member.dto.MemberLoginDto;
 import com.csn.csn.member.entity.Member;
 import com.csn.csn.member.repository.MemberRepository;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Slf4j
@@ -50,6 +51,7 @@ public class MemberServiceImpl {
 //                });
     }
 
+    // 네이버 로그인 및 회원가입
     public void joinOrLoginWithNaver(MemberJoinOrLoginWithNaverDto memberJoinOrLoginWithNaverDto) {
         String loginId = memberJoinOrLoginWithNaverDto.getLoginId();
 

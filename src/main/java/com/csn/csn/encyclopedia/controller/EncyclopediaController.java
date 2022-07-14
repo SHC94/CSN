@@ -2,7 +2,9 @@ package com.csn.csn.encyclopedia.controller;
 
 import com.csn.csn.Item.entity.DictionaryItem;
 import com.csn.csn.encyclopedia.service.EncyclopediaService;
+import com.csn.csn.encyclopedia.vo.PopularSearch;
 import com.csn.csn.main.vo.SearchParam;
+import com.csn.csn.search.entity.Search;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,7 +36,20 @@ public class EncyclopediaController {
         //백과사전 데이터 조회
         List<DictionaryItem> dictionaryList = encyclopediaService.selectDictionaryList();
 
-        model.addAttribute("dictionaryList", dictionaryList);
+        //통합 검색어 트렌드
+        encyclopediaService.ApiExamDatalabTrend();
+
+        //인기검색어
+        List<PopularSearch> popularSearch = encyclopediaService.popularSearch();
+
+        log.info("인기검색어 start ");
+        for (PopularSearch search : popularSearch) {
+            log.info(search.toString());
+        }
+        log.info("인기검색어 end ");
+        model.addAttribute("dictionaryList" , dictionaryList);
+        model.addAttribute("popularSearch"  , popularSearch);
+
         return "encyclopedia/encyclopedia";
     }//end encyclopediaEnter()
 

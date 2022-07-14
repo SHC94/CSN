@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link href="../css/bootstrap.min.css"
+        th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container" style="max-width: 600px">
+  <div class="py-5 text text-center">
+    <h2>프로필</h2>
+  </div>
+
+  <div>
+    <img th:src="${member.profile_image}"
+         alt="My Image"
+         id="img"
+         class="loginImage"
+         style="widht:100px; height:100px;">
+  </div>
+
+  <hr class="my-4">
+
+  <div>
+    <label for="loginId">아이디</label>
+    <input type="text"
+           id="loginId"
+           class="form-control"
+           value="lalalalz"
+           th:value="${member.loginWay == null ? member.id : member.email}" readonly/>
+  </div>
+  <div>
+    <label for="password">비밀번호</label>
+    <input type="password"
+           id="password"
+           class="form-control"
+           value="testPassword"
+           th:value="${member.nickname}" readonly/>
+  </div>
+  <div>
+    <label for="name">이름</label>
+    <input type="text"
+           id="name"
+           class="form-control"
+           value="최진수"
+           th:value="${member.name}" readonly/>
+  </div>
+  <div>
+    <label for="email">이메일</label>
+    <input type="text"
+           id="email"
+           class="form-control"
+           value="lalalalz@naver.com"
+           th:value="${member.email}" readonly/>
+  </div>
+  <div>
+    <label for="phone">전화번호</label>
+    <input type="text"
+           id="phone"
+           class="form-control"
+           value="010-1234-5678" readonly/>
+  </div>
+
+</div>
+</body>
+</html>

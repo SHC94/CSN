@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +27,21 @@ public class SearchServiceImpl implements SearchService {
                 .ifPresent((m) -> {
                     searchRepository.save(new Search(m, query));
                 });
+    }
+
+    @Override
+    public Optional<Search> doSearchWithSession(HttpSession httpSession, String query) {
+        if(httpSession == null) {
+            return Optional.empty();
+        }
+
+        String loginId = httpSession.getId();
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 회원 아이디 입니다."));
+
+        Search search = new Search(findMember, query);
+        searchRepository.save(search);
+        return Optional.of(search);
     }
 
     @Override

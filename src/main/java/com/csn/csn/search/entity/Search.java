@@ -2,12 +2,14 @@ package com.csn.csn.search.entity;
 
 import com.csn.csn.member.entity.Member;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString
 public class Search { // 검색 할 때
 
     @Id @GeneratedValue
