@@ -48,6 +48,17 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByEmail(String email) {
+        String jpql = "select m from Member m where m.email = :email";
+        List<Member> memberList = em.createQuery(jpql, Member.class)
+                .setParameter("email", email)
+                .getResultList();
+
+        if(memberList.isEmpty()) return Optional.empty();
+        return Optional.of(memberList.get(0));
+    }
+
+    @Override
     public List<Member> findAll() {
         String jpql = "select m from Member m";
         return em.createQuery(jpql, Member.class)

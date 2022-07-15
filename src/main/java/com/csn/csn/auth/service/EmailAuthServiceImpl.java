@@ -37,6 +37,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(body);
 
+        log.info("이메일 전송 완료 : {}", toAddress);
         mailSender.send(simpleMailMessage);
     }
 }

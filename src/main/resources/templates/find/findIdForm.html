@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <title>Title</title>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>아이디 찾기</h2>
+    </div>
+
+    <hr class="my-4">
+
+    <form action="findIdForm.html" th:action th:object="${memberFindIdDto}" method="post">
+        <div>
+            <label for="email">인증 코드 메일을 받을 이메일을 입력하세요</label>
+            <input type="email"
+                   id="email"
+                   th:field="*{email}"
+                   th:errorclass="field-error"
+                   class="form-control"
+                   placeholder="이메일을 입력하세요.">
+            <div th:errors="*{email}" class="field-error"></div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        type="submit">확인</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        type="button"
+                        onclick="location.href='home.html'"
+                        th:onclick="|location.href='@{/}'|">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

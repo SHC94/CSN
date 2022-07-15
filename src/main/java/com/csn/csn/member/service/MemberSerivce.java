@@ -24,4 +24,7 @@ public interface MemberSerivce {
     public String findLoginID(HttpSession httpSession,
                               String AuthenticationCode,
                               LocalDateTime nowTime) throws AuthenticationException;
+
+    // 해당 이메일을 가지고 있는 회원 여부
+    public boolean hasMemberForEmail(String email);
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <title>Title</title>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>아이디 확인</h2>
+    </div>
+
+    <hr class="my-4">
+
+    <form action="findIdForm.html" th:action method="post">
+        <div>
+            <label for="loginId">아이디를 확인하세요</label>
+            <input type="text"
+                   id="loginId"
+                   th:value="${loginId}"
+                   class="form-control" readonly>
+        </div>
+
+        <hr class="my-4">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        type="button"
+                        onclick="location.href='home.html'"
+                        th:onclick="|location.href='@{/}'|">홈으로</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

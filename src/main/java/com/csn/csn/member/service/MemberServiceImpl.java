@@ -76,6 +76,13 @@ public class MemberServiceImpl implements MemberSerivce {
     }
 
     @Override
+    public boolean hasMemberForEmail(String email) {
+        log.info("hasMemberForEmail : {}", email);
+        return memberRepository.findByEmail(email)
+                .isPresent();
+    }
+
+    @Override
     public String findLoginID(HttpSession httpSession, String authCode, LocalDateTime arrivalTime) throws AuthenticationException {
         EmailAuth emailAuth = (EmailAuth) httpSession.getAttribute("emailAuth");
 
@@ -83,8 +90,8 @@ public class MemberServiceImpl implements MemberSerivce {
             throw new AuthenticationException("인증에 실패하였습니다.");
         }
 
-        String loginId = (String)httpSession.getAttribute("email");
-        Member findMember = memberRepository.findByLoginId(loginId)
+        String email = (String)httpSession.getAttribute("email");
+        Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 회원입니다."));
 
         return findMember.getLoginId();
