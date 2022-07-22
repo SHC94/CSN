@@ -27,9 +27,18 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
+    public List<Item> findByLink(String link) {
+        String jqpl = "select i from Item i where i.link = :link";
+
+        return em.createQuery(jqpl, Item.class)
+                .setParameter("link", link)
+                .getResultList();
+    }
+
+    @Override
     public List<Item> findAllSpecificType(String type) {
-        String query = "select i from Item i where type(i) in (" + type + ")";
-        return em.createQuery(query, Item.class)
+        String jpql = "select i from Item i where type(i) in (" + type + ")";
+        return em.createQuery(jpql, Item.class)
                 .getResultList();
     }
 

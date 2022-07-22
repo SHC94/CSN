@@ -11,6 +11,8 @@ public interface ItemRepository {
 
     Optional<Item> find(Long itemId);
 
+    List<Item> findByLink(String link);
+
     List<Item> findAllSpecificType(String type);
 
     List<Item> findAll();
