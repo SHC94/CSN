@@ -1,11 +1,20 @@
 package com.csn.csn.search.entity;
 
+import com.csn.csn.Item.entity.Item;
+import com.csn.csn.comm.NaverApiCall;
+import com.csn.csn.comm.NaverApiConstants;
 import com.csn.csn.member.entity.Member;
+import com.github.scribejava.apis.NaverApi;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.csn.csn.comm.NaverApiCall.*;
+import static com.csn.csn.comm.NaverApiConstants.REQUEST_METHOD_GET;
 
 @Entity
 @Getter
@@ -28,5 +37,11 @@ public class Search { // 검색 할 때
         this.member = member;
         this.query = query;
         this.buildDateTime = LocalDateTime.now();
+    }
+
+    public Search(Member member, String query, LocalDateTime buildDateTime) {
+        this.member = member;
+        this.query = query;
+        this.buildDateTime = buildDateTime;
     }
 }

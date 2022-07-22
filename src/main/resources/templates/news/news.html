@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+</head>
+<body>
+<!--헤더 영역-->
+<div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+<!--바디 영역-->
+<div class="container">
+
+    <input id="sessionId" type="hidden" th:value="${session.id}"/>
+
+    <!--검색 영역-->
+    <span class="test">
+            <input type="text" class="encyclopediaSearch" placeholder="검색어를 입력해주세요.">
+            <button class="encyclopediaSearchBtn">검색</button>
+            <div id="list"></div>
+        </span>
+
+    <!--백과사전 조회 출력 영역-->
+    <div class="dictionary_search">
+        <div class="dictionary_dashboard">
+            <div th:each="dictionary : ${newsList}">
+                <div class="dictionary_area">
+                    <a th:href="${newsList.link}">
+                        <span th:iniine="none">[(${dictionary.title})]</span>
+                    </a><br>
+<!--                    <img th:src="${newsList.thumbnail}"><br>-->
+<!--                    <span th:iniine="none">[(${dictionary.description})]</span><br>-->
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <!--인기검색어, 인기브랜드-->
+    <div class="dictionary_favorite" align="left">
+        <span>검색어 순위</span>
+        <div class="searchRank" th:each="popular : ${popularSearch}">
+            <span th:text="${popular.rank}"></span>
+            <span th:text="${popular.query}"></span>
+        </div>
+    </div>
+</div>
+
+<!--푸터 영역-->
+<div th:replace="fragments/footer :: footer" />
+</body>
+<script type="text/javascript">
+    /*HTML 로딩 후 실행 함수=================================================================================================*/
+    $(document).ready(function(){
+        console.log('ready function');
+    });
+
+    /*이벤트 함수 =================================================================================================*/
+
+    //검색 inputbox focus 이벤트
+    $('.encyclopediaSearch').on('focus', function(e) {
+        e.preventDefault();
+
+        //세선 ID
+        var id = $('#sessionId').val();
+
+        //최근 검색어 조회
+        selectSearchList(id);
+    });
+
+    //검색 inputbox focus out 이벤트
+    $('.encyclopediaSearch').on('focusout',function(e){
+        e.preventDefault();
+
+        //최근 검색어 영역 초기화
+        //$("#list").empty();
+
+    });
+
+    //최근 검색어 목록 클릭 이벤트
+    $(document).on("click",".selectQuery",function(){
+        var inputData = $(this).text();
+        $('.encyclopediaSearch').val(inputData);
+        $('#list').empty();
+    });
+
+    //검색 버튼 클릭 이벤트
+    $('.encyclopediaSearchBtn').on('click', function() {
+        console.log('검색 버튼 클릭 이벤트');
+
+        var queryData = $('.encyclopediaSearch').val();
+        var sessionId = $('#sessionId').val();
+
+        if(queryData == null || queryData == '') {
+
+            alert('검색어를 입력해주세요.');
+
+        } else {
+
+            var data = {
+                query : queryData,
+                id : sessionId,
+                searchType : "NEWS"
+            };
+
+            var request = $.ajax({
+                url       : "/news/search",         // 통신할url
+                data      : data,                   // 데이터
+                method    : "POST",			        // 통신할 메서드 타입
+                dataType  : "json"			        // 전송받은 데이터를 변환시킬 컨텐츠 타입
+            });
+
+            console.log("통신 성공");
+
+            request.done(function( data ) {
+                console.log('성공따리 성공따');
+                // console.log(JSON.stringify(data));
+
+                $("#list").empty();
+                $(".dictionary_dashboard").empty();
+
+                $(data).each(function(){
+                    var link        = this.link;
+                    var title       = this.title;
+                    var pubDate    = this.pubDate;
+                    var description = this.description;
+                    console.log('link1 = ' + link);
+                    console.log('title2 = ' + title);
+                    console.log('pubDate = ' + pubDate);
+                    console.log('description4 = ' + description);
+
+                    $(".dictionary_dashboard").append("<div class='dictionary_area' style='text-align: left'>"
+                        + "<a href=" + link + ">"
+                        + "<span>" + title + "</span>"
+                        + "</a><br>"
+                        + "<span>" + description + "</span><br>"
+                        + "<span>" + "발행일 : " + pubDate + "</span>"
+                        + "<hr>"
+                    );
+
+                });
+            });
+
+        }//end if()
+
+    });
+    /*사용자 정의 함수 =================================================================================================*/
+
+    //최근 검색어 조회
+    function selectSearchList(id) {
+
+        var data = {
+            "id" : id
+        }
+
+        var request = $.ajax({
+            url       : "/selectSearchList", 	// 통신할url
+            method    : "POST",			    // 통신할 메서드 타입
+            data      : data,		            // 전송할 데이터
+            dataType  : "json"			    // 전송받은 데이터를 변환시킬 컨텐츠 타입
+        });
+
+        request.done(function(data) {
+            $("#list").empty();
+
+            $(data).each(function(){
+                var query = this.query;
+                $("#list").append("<p class='selectQuery'>" + query + "</p>");
+            });
+
+        });
+    }//end selectSearchList()
+
+</script>
+</html>

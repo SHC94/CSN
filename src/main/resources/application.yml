@@ -32,6 +32,20 @@ spring:
       enable: true
       force: true
 
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: mkjs0309@gmail.com
+    password: pxcpoaxkgwyenryh
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+
 api:
   naver:
     client_id: K9TJfmrbHamf0arWWpQa

@@ -1,19 +1,21 @@
 package com.csn.csn.comm;
 
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
-import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
+
+import static com.csn.csn.comm.NaverApiConstants.*;
 
 
 @Slf4j
@@ -75,7 +77,7 @@ public class NaverApiCall {
 
         URL url                         = null;
         HttpURLConnection con           = null;
-        HashMap<String, Object> result = new HashMap<>();
+        HashMap<String, Object> result  = new HashMap<>();
 
         try {
 
@@ -119,7 +121,7 @@ public class NaverApiCall {
      * @return
      * @throws ParseException
      */
-    public JSONObject NaverApiJsonParsing(String parsingStr) throws ParseException {
+    public static JSONObject NaverApiJsonParsing(String parsingStr) throws ParseException {
         //1. Parser
         JSONParser jsonParser = new JSONParser();
 
@@ -131,4 +133,46 @@ public class NaverApiCall {
 
         return jsonObj;
     }//end NaverApiJsonParsing()
+
+
+    /**
+     *
+     * @param searchType : 검색 유형 (NaverApiConstansts 참고)
+     * @param query : 검색어
+     * @return
+     * @throws Exception
+     */
+    public static JSONArray callNaverOpenApi(String searchType, String query, String clientId, String clientSecret) {
+
+        HashMap<String, String> apiURLs = getURLs();
+        String apiUrl = apiURLs.getOrDefault(searchType, InCorrectURL);
+
+        if (apiUrl.equals(InCorrectURL)) {
+            throw new IllegalArgumentException("검색 타입이 올바르지 않습니다.");
+        }
+
+        try {
+
+            // 실제 API 호출
+            String completeApiUrl = apiBaseInfo(apiUrl, query, 10, 1, null);
+            HashMap<String, Object> apiResult = apiCall(completeApiUrl, REQUEST_METHOD_GET, clientId, clientSecret);
+
+            Integer responseCode = (Integer) apiResult.get("responseCode");
+            String responseBody = (String) apiResult.get("responseBody");
+            JSONObject jsonObj = NaverApiJsonParsing(responseBody);
+            JSONArray items = (JSONArray) jsonObj.get("items");
+
+            log.info("callNaverOpenApi = {}, {}", clientSecret, clientId);
+
+            return items;
+        }
+        catch (ParseException e) {
+            // 런타임 예외로 변환
+            throw new IllegalArgumentException("API 파싱 에러", e);
+        }
+        catch (Exception e) {
+            // 런타임 예외로 변환
+            throw new IllegalStateException("API 호출 에러", e);
+        }
+    }
 }//end class()

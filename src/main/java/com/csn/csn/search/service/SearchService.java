@@ -1,5 +1,7 @@
 package com.csn.csn.search.service;
 
+import com.csn.csn.Item.entity.Item;
+import com.csn.csn.main.vo.SearchParam;
 import com.csn.csn.member.entity.Member;
 import com.csn.csn.search.entity.Search;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 public interface SearchService {
 
     void doSearch(String loginId, String query);
+
+    List<Item> doSearch(SearchParam searchParam);
 
     Optional<Search> doSearchWithSession(HttpSession httpSession, String query);
 

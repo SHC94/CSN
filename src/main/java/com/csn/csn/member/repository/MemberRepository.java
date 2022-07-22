@@ -16,5 +16,7 @@ public interface MemberRepository {
 
     Optional<Member> findByLoginId(String loginId);
 
+    Optional<Member> findByEmail(String email);
+
     List<Member> findAll();
 }

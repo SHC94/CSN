@@ -1,8 +1,15 @@
 package com.csn.csn.comm;
 
-import org.springframework.web.bind.annotation.RequestMethod;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.util.HashMap;
+
+@Getter
 public class NaverApiConstants {
+
+    public static final String InCorrectURL = "InCorrectURL";
+
 
     public static final String REQUEST_METHOD_GET   = "GET";
     public static final String REQUEST_METHOD_POST  = "POST";
@@ -23,4 +30,26 @@ public class NaverApiConstants {
     public static final String IMAGE        = "https://openapi.naver.com/v1/search/image?";             //검색 > 이미지
     public static final String SHOP         = "https://openapi.naver.com/v1/search/shop.json?";         //검색 > 쇼핑
     public static final String DOC          = "https://openapi.naver.com/v1/search/doc.json?";          //검색 > 전문자료
+
+    public NaverApiConstants() {}
+
+    public static HashMap<String, String> getURLs() {
+        HashMap<String, String> urls = new HashMap<>();
+
+        urls.put("BLOG", BLOG);
+        urls.put("NEWS", NEWS);
+        urls.put("BOOK", BOOK);
+        urls.put("ADULT", ADULT);
+        urls.put("ENCYC", ENCYC);
+        urls.put("MOVIE", MOVIE);
+        urls.put("CAFEARTICLE", CAFEARTICLE);
+        urls.put("KIN", KIN);
+        urls.put("LOCAL", LOCAL);
+        urls.put("ERRATA", ERRATA);
+        urls.put("WEBKR", WEBKR);
+        urls.put("IMAGE", IMAGE);
+        urls.put("SHOP", SHOP);
+
+        return urls;
+    }
 }
