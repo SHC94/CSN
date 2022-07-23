@@ -20,10 +20,10 @@ public class NewsController {
     private final ItemRepository itemRepository;
     private final SearchService searchService;
 
-    @GetMapping("/enter")
-    public String enter(@ModelAttribute SearchDto searchDto) {
-        return "news/news";
-    }
+//    @GetMapping("/enter")
+//    public String enter(@ModelAttribute SearchDto searchDto) {
+//        return "news/news";
+//    }
 
     @ResponseBody
     @PostMapping("/search")
